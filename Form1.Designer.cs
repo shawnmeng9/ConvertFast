@@ -72,7 +72,8 @@ namespace ConvertFast
             this.cbFastFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFastFile.FormattingEnabled = true;
             this.cbFastFile.Items.AddRange(new object[] {
-            "HydroDyn"});
+            "HydroDyn",
+            "SubDyn"});
             this.cbFastFile.Location = new System.Drawing.Point(76, 101);
             this.cbFastFile.Name = "cbFastFile";
             this.cbFastFile.Size = new System.Drawing.Size(121, 21);

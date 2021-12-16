@@ -17,7 +17,8 @@ namespace ConvertFast
             None,
             Fast,
             HD,
-            ED
+            ED,
+            SD
         }
 
         enum OutFile
@@ -28,6 +29,7 @@ namespace ConvertFast
         }
 
         static string fileName_HD = "";
+        static string fileName_SD = "";
         static string status = "";
         static FastFile fastFile;
         static OutFile outFile;
@@ -49,6 +51,15 @@ namespace ConvertFast
                 if (openD.ShowDialog() == DialogResult.OK)
                 {
                     fileName_HD = openD.FileName;
+                }
+            }
+            else if (fastFile == FastFile.SD)
+            {
+                openD.DefaultExt = ".dat";
+                openD.Filter = "SubDyn Input File (.dat)|*.dat";
+                if (openD.ShowDialog() == DialogResult.OK)
+                {
+                    fileName_SD = openD.FileName;
                 }
             }
             else
@@ -75,6 +86,27 @@ namespace ConvertFast
                 ToIsm.ConvertHDToIsm(hdModel, ref status);
                 txtStatus.Text = status;
             }
+            else if ((fastFile == FastFile.SD) && (outFile == OutFile.SacsPy))
+            {
+                SDModel sdModel = new SDModel();
+                sdModel.ParseSDInputFile(fileName_SD, status);
+
+                ToSacs.ConvertSDToSacs(sdModel, ref status);
+                txtStatus.Text = status;
+            }
+            else if ((fastFile == FastFile.SD) && (outFile == OutFile.Ism))
+            {
+                SDModel sdModel = new SDModel();
+                sdModel.ParseSDInputFile(fileName_SD, status);
+
+                ToIsm.ConvertSDToIsm(sdModel, ref status);
+                txtStatus.Text = status;
+            }
+            else
+            {
+                //add more
+            }
+
         }
 
         private FastFile HandleFastFile()
@@ -82,6 +114,10 @@ namespace ConvertFast
             if (cbFastFile.SelectedIndex == 0)
             {
                 return FastFile.HD;
+            }
+            else if (cbFastFile.SelectedIndex == 1)
+            {
+                return FastFile.SD;
             }
             else
             {

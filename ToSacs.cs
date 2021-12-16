@@ -54,6 +54,50 @@ namespace ConvertFast
             status = "Good";
         }
 
+        public static void ConvertSDToSacs(SDModel sdModel, ref string status)
+        {
+            string filePath = System.IO.Path.GetDirectoryName(sdModel.sdFile);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(sdModel.sdFile);
+            string sacsFileName = filePath + "\\" + fileName + ".py";
+            var sacsFile = new StreamWriter(sacsFileName);
+
+            sacsFile.WriteLine("import SACS");
+            sacsFile.WriteLine("model = SACS.Model(1)");
+
+            foreach (KeyValuePair<int, Vector3> entry in sdModel.jointList)
+            {
+                string jointID = "id=\"" + entry.Key.ToString() + "\"";
+                string jointCoord = "coord=(" + entry.Value.X.ToString() + "," + entry.Value.Y.ToString() + "," + entry.Value.Z.ToString() + ")";
+                sacsFile.WriteLine("j" + entry.Key.ToString() + " = " + "model.AddJoint(" + jointID + "," + jointCoord + ")");
+
+
+                //string[] jointValues = new string[] { "JOINT", entry.Key.ToString(), entry.Value.X.ToString(), entry.Value.Y.ToString(), entry.Value.Z.ToString()};
+                //string oneLine = string.Join(' ', jointValues);
+            }
+
+
+            sacsFile.WriteLine("");
+
+            foreach (KeyValuePair<int, double[]> entry in sdModel.sectionList)
+            {
+                string sectionID = "mg" + entry.Key.ToString();
+                double diameterInCm = entry.Value[0] * 100.0;
+                double thicknessInCm = entry.Value[1] * 100.0;
+                sacsFile.WriteLine(sectionID + " = model.AddMemberGroup(\"MG" + entry.Key.ToString() + "\")");
+                sacsFile.WriteLine(sectionID + ".AddSegment(Tube={\'OD\':" + diameterInCm.ToString() + ", \"T\":" + thicknessInCm.ToString() + "})");
+            }
+
+            foreach (KeyValuePair<int, int[]> entry in sdModel.memberList)
+            {
+                sacsFile.WriteLine("model.AddMember(" + "j" + entry.Value[0].ToString() + ", j" + entry.Value[1].ToString() + ", " + "mg" + entry.Value[2].ToString() + ")");
+            }
+
+            sacsFile.WriteLine("model.SaveAs(r\"" + filePath + "\\" + fileName + ".inp\")");
+            sacsFile.Close();
+
+            status = "Good";
+        }
+
 
     }
 }
