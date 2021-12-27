@@ -8,8 +8,100 @@ using System.IO;
 
 namespace ConvertFast
 {
-    public class FastModel : HDModel
+    public class FstModel : HDModel
     {
+        public string fstFile { get; set; }
+        public string filePath { get; set; }
+        public string EDFile { get; set; }
+        public string HydroFile { get; set; }
+        public string AeroFile { get; set; }
+        public string MooringFile { get; set; }
+        public string SubFile { get; set; }
+
+        public int? CompElast { get; set; }
+        public int? CompAero { get; set; }
+        public int? CompHydro { get; set; }
+        public int? CompMooring { get; set; }
+        public int? CompSub { get; set; }
+
+        public bool convertElast { get; set; }
+        public bool convertAero { get; set; }
+        public bool convertHydro { get; set; }
+        public bool convertSub { get; set; }
+        public bool convertMooring { get; set; }
+
+        public FstModel()
+        {
+            convertElast = false;
+            convertAero = false;
+            convertHydro = false;
+            convertSub = false;
+            convertMooring = false;
+        }
+
+
+        public void ParseFstInputFile(string fileName_fst, string status)
+        {
+            fstFile = fileName_fst;
+            var lines = File.ReadAllLines(fstFile);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+
+                if (oneInput.Length >= 2 && oneInput[1] == "CompElast")
+                {
+                    CompElast = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "CompAero")
+                {
+                    CompAero = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "CompHydro")
+                {
+                    CompHydro = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "CompMooring")
+                {
+                    CompMooring = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "CompSub")
+                {
+                    CompSub = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "EDFile")
+                {
+                    EDFile = oneInput[0];
+                    EDFile = filePath + "\\" + EDFile.Replace("\"", "");
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "HydroFile")
+                {
+                    HydroFile = oneInput[0];
+                    HydroFile = filePath + "\\" + HydroFile.Replace("\"", "");
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "AeroFile")
+                {
+                    AeroFile = oneInput[0];
+                    AeroFile = filePath + "\\" + AeroFile.Replace("\"", "");
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "MooringFile")
+                {
+                    MooringFile = oneInput[0];
+                    MooringFile = filePath + "\\" + MooringFile.Replace("\"", "");
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "SubFile")
+                {
+                    SubFile = oneInput[0];
+                    SubFile = filePath + "\\" + SubFile.Replace("\"", "");
+                }
+                else
+                {
+                    //add more
+                }
+            }
+
+        }
+
     }
 
     public class HDModel
