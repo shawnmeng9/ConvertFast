@@ -117,6 +117,8 @@ namespace ConvertFast
             this.dgvFastInputFiles.RowHeadersWidth = 51;
             this.dgvFastInputFiles.Size = new System.Drawing.Size(524, 185);
             this.dgvFastInputFiles.TabIndex = 8;
+            this.dgvFastInputFiles.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFastInputFiles_CellValueChanged);
+            this.dgvFastInputFiles.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvFastInputFiles_CurrentCellDirtyStateChanged);
             // 
             // Form1
             // 

@@ -19,12 +19,21 @@ namespace ConvertFast
             Ism
         }
 
+        enum FastModule
+        {
+            None,
+            Aero,
+            Elast,
+            Hydro,
+            Mooring,
+            Sub
+        }
+
         FstModel fstModel = new FstModel();
-        HDModel hdModel = new HDModel(); 
-        SDModel sdModel = new SDModel();
         static string fileName_fst = "";
         static string status = "";
         static OutFile outFile;
+        static IDictionary<int, FastModule> dicFastModules = new Dictionary<int, FastModule> { };
 
         public Form1()
         {
@@ -46,9 +55,8 @@ namespace ConvertFast
 
                 DataGridViewCheckBoxColumn chkIncluded = new DataGridViewCheckBoxColumn();
                 chkIncluded.ValueType = typeof(bool);
-                chkIncluded.Name = "coliIncluded";
+                chkIncluded.Name = "colIncluded";
                 chkIncluded.HeaderText = "Included";
-                chkIncluded.ReadOnly = true;
                 dgvFastInputFiles.Columns.Add(chkIncluded);
 
                 dgvFastInputFiles.Columns.Add("colFeature", "Feature");
@@ -59,33 +67,47 @@ namespace ConvertFast
                 string feature = "";
                 string module = "";
                 string fileName = "";
+                int rowIndex = -1;
+                dicFastModules.Clear();
+                dgvFastInputFiles.Rows.Clear();
 
                 if (GetCompElastInfo(fstModel.CompElast, ref included, ref feature, ref module, ref fileName))
                 {
                     fstModel.convertElast = included;
                     dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Elast);
                 }
                 if (GetCompAeroInfo(fstModel.CompAero, ref included, ref feature, ref module, ref fileName))
                 {
                     fstModel.convertAero = included;
                     dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Aero);
                 }
                 if (GetCompHydroInfo(fstModel.CompHydro, ref included, ref feature, ref module, ref fileName))
                 {
                     fstModel.convertHydro = included;
                     dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Hydro);
                 }
                 if (GetCompSubInfo(fstModel.CompSub, ref included, ref feature, ref module, ref fileName))
                 {
                     fstModel.convertSub = included;
                     dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Sub);
                 }
                 if (GetCompMooringInfo(fstModel.CompMooring, ref included, ref feature, ref module, ref fileName))
                 {
                     fstModel.convertMooring = included;
                     dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Mooring);
                 }
 
+                SetModifiableCells();
 
 
             }
@@ -103,69 +125,31 @@ namespace ConvertFast
             }
             if (fstModel.convertHydro)
             {
-                hdModel.ParseHDInputFile(fstModel.HydroFile, status);
+                fstModel.hdModel = new HDModel();
+                fstModel.hdModel.ParseHDInputFile(fstModel.HydroFile, status);
             }
             if (fstModel.convertSub)
-            {               
-                sdModel.ParseSDInputFile(fstModel.SubFile, status);
+            {
+                fstModel.sdModel = new SDModel();
+                fstModel.sdModel.ParseSDInputFile(fstModel.SubFile, status);
             }
             if (fstModel.convertMooring)
             {
-                //add code
+                fstModel.mdModel = new MDModel();
+                fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status);
             }
-
 
 
             if (outFile == OutFile.SacsPy)
             {
-                ToSacs.ConvertHDToSacs(hdModel, ref status);
+                ToSacs.ConvertToSacs(fstModel, ref status);
                 txtStatus.Text = status;
             }
             else if (outFile == OutFile.Ism)
             {
-                ToIsm.ConvertHDToIsm(hdModel, ref status);
+                ToIsm.ConvertToIsm(fstModel, ref status);
                 txtStatus.Text = status;
             }
-
-
-
-            //if ((fastFile == FastFile.HD) && (outFile == OutFile.SacsPy))
-            //{
-            //    HDModel hdModel = new HDModel();
-            //    hdModel.ParseHDInputFile(fileName_HD, status);
-
-            //    ToSacs.ConvertHDToSacs(hdModel, ref status);
-            //    txtStatus.Text = status;
-            //}
-            //else if ((fastFile == FastFile.HD) && (outFile == OutFile.Ism))
-            //{
-            //    HDModel hdModel = new HDModel();
-            //    hdModel.ParseHDInputFile(fileName_HD, status);
-
-            //    ToIsm.ConvertHDToIsm(hdModel, ref status);
-            //    txtStatus.Text = status;
-            //}
-            //else if ((fastFile == FastFile.SD) && (outFile == OutFile.SacsPy))
-            //{
-            //    SDModel sdModel = new SDModel();
-            //    sdModel.ParseSDInputFile(fileName_SD, status);
-
-            //    ToSacs.ConvertSDToSacs(sdModel, ref status);
-            //    txtStatus.Text = status;
-            //}
-            //else if ((fastFile == FastFile.SD) && (outFile == OutFile.Ism))
-            //{
-            //    SDModel sdModel = new SDModel();
-            //    sdModel.ParseSDInputFile(fileName_SD, status);
-
-            //    ToIsm.ConvertSDToIsm(sdModel, ref status);
-            //    txtStatus.Text = status;
-            //}
-            //else
-            //{
-            //    //add more
-            //}
-
         }
 
         private OutFile HandleOutFile()
@@ -287,7 +271,7 @@ namespace ConvertFast
             {
                 if (CompSub == 1)
                 {
-                    included = false;
+                    included = true;
                     feature = "Sub-structural dynamics";
                     module = "SubDyn";
                     fileName = fstModel.SubFile;
@@ -331,7 +315,7 @@ namespace ConvertFast
                 }
                 else if (CompMooring == 3)
                 {
-                    included = false;
+                    included = true;
                     feature = "Mooring system";
                     module = "MoorDyn";
                     fileName = fstModel.MooringFile;
@@ -347,6 +331,59 @@ namespace ConvertFast
             }
         }
 
+        private void SetModifiableCells()
+        {
+            foreach (DataGridViewRow row in dgvFastInputFiles.Rows)
+            {
+                row.ReadOnly = true;
+                row.Cells["colIncluded"].Style.BackColor = Color.Gray;
+                if (dicFastModules[row.Index] == FastModule.Hydro || dicFastModules[row.Index] == FastModule.Sub || dicFastModules[row.Index] == FastModule.Mooring)
+                {
+                    row.Cells["colIncluded"].ReadOnly = false;
+                    row.Cells["colIncluded"].Style.BackColor = Color.White;
+                }
+            }
+            //dgvFastInputFiles.Refresh();
+        }
+
+        void dgvFastInputFiles_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgvFastInputFiles.IsCurrentCellDirty)
+            {
+                dgvFastInputFiles.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        public void dgvFastInputFiles_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvFastInputFiles.Columns[e.ColumnIndex].Name == "colIncluded")
+            {
+               DataGridViewCheckBoxCell checkCell =(DataGridViewCheckBoxCell)dgvFastInputFiles.Rows[e.RowIndex].Cells["colIncluded"];
+
+                if (dicFastModules[e.RowIndex] == FastModule.Aero)
+                {
+                    fstModel.convertAero = (Boolean)checkCell.Value;
+                }
+                else if (dicFastModules[e.RowIndex] == FastModule.Elast)
+                {
+                    fstModel.convertElast = (Boolean)checkCell.Value;
+                }
+                else if (dicFastModules[e.RowIndex] == FastModule.Hydro)
+                {
+                    fstModel.convertHydro = (Boolean)checkCell.Value;
+                }
+                else if (dicFastModules[e.RowIndex] == FastModule.Sub)
+                {
+                    fstModel.convertSub = (Boolean)checkCell.Value;
+                }
+                else if (dicFastModules[e.RowIndex] == FastModule.Mooring)
+                {
+                    fstModel.convertMooring = (Boolean)checkCell.Value;
+                }
+
+                dgvFastInputFiles.Invalidate();
+            }
+        }
 
     }
 }

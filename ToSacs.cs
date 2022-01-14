@@ -10,16 +10,46 @@ namespace ConvertFast
 {
     public static class ToSacs
     {
-        public static void ConvertHDToSacs(HDModel hdModel, ref string status)
+        public static void ConvertToSacs(FstModel fstModel, ref string status)
         {
-            string filePath = System.IO.Path.GetDirectoryName(hdModel.hdFile);
-            string fileName = System.IO.Path.GetFileNameWithoutExtension(hdModel.hdFile);
-            string sacsFileName = filePath + "\\" + fileName + ".py";
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(fstModel.fstFile);
+            string sacsFileName = fstModel.filePath + "\\" + fileName + ".py";
             var sacsFile = new StreamWriter(sacsFileName);
 
             sacsFile.WriteLine("import SACS");
             sacsFile.WriteLine("model = SACS.Model(1)");
 
+            if (fstModel.convertHydro)
+            {
+                ConvertHDToSacs(fstModel.hdModel, sacsFile, ref status);
+            }
+            if (fstModel.convertSub)
+            {
+                ConvertSDToSacs(fstModel.sdModel, sacsFile, ref status);
+            }
+            if (fstModel.convertMooring)
+            {
+                ConvertMDToSacs(fstModel.mdModel, sacsFile, ref status);
+            }
+            if (fstModel.convertElast)
+            {
+                //add code
+            }
+            if (fstModel.convertAero)
+            {
+                //add code
+            }
+
+
+            sacsFile.WriteLine("model.SaveAs(r\"" + fstModel.filePath + "\\" + fileName + ".inp\")");
+            sacsFile.Close();
+
+            status = "Good";
+
+        }
+
+        private static void ConvertHDToSacs(HDModel hdModel, StreamWriter sacsFile, ref string status)
+        {
             foreach (KeyValuePair<int, Vector3> entry in hdModel.jointList)
             {
                 string jointID = "id=\"" + entry.Key.ToString() + "\"";
@@ -30,7 +60,6 @@ namespace ConvertFast
                 //string[] jointValues = new string[] { "JOINT", entry.Key.ToString(), entry.Value.X.ToString(), entry.Value.Y.ToString(), entry.Value.Z.ToString()};
                 //string oneLine = string.Join(' ', jointValues);
             }
-
 
             sacsFile.WriteLine("");
 
@@ -47,23 +76,10 @@ namespace ConvertFast
             {
                 sacsFile.WriteLine("model.AddMember(" + "j" + entry.Value[0].ToString() + ", j" + entry.Value[1].ToString() + ", " + "mg" + entry.Value[2].ToString() + ")");
             }
-
-            sacsFile.WriteLine("model.SaveAs(r\"" + filePath + "\\" + fileName + ".inp\")");
-            sacsFile.Close();
-
-            status = "Good";
         }
 
-        public static void ConvertSDToSacs(SDModel sdModel, ref string status)
+        private static void ConvertSDToSacs(SDModel sdModel, StreamWriter sacsFile, ref string status)
         {
-            string filePath = System.IO.Path.GetDirectoryName(sdModel.sdFile);
-            string fileName = System.IO.Path.GetFileNameWithoutExtension(sdModel.sdFile);
-            string sacsFileName = filePath + "\\" + fileName + ".py";
-            var sacsFile = new StreamWriter(sacsFileName);
-
-            sacsFile.WriteLine("import SACS");
-            sacsFile.WriteLine("model = SACS.Model(1)");
-
             foreach (KeyValuePair<int, Vector3> entry in sdModel.jointList)
             {
                 string jointID = "id=\"" + entry.Key.ToString() + "\"";
@@ -74,7 +90,6 @@ namespace ConvertFast
                 //string[] jointValues = new string[] { "JOINT", entry.Key.ToString(), entry.Value.X.ToString(), entry.Value.Y.ToString(), entry.Value.Z.ToString()};
                 //string oneLine = string.Join(' ', jointValues);
             }
-
 
             sacsFile.WriteLine("");
 
@@ -91,13 +106,27 @@ namespace ConvertFast
             {
                 sacsFile.WriteLine("model.AddMember(" + "j" + entry.Value[0].ToString() + ", j" + entry.Value[1].ToString() + ", " + "mg" + entry.Value[2].ToString() + ")");
             }
-
-            sacsFile.WriteLine("model.SaveAs(r\"" + filePath + "\\" + fileName + ".inp\")");
-            sacsFile.Close();
-
-            status = "Good";
         }
 
+        private static void ConvertMDToSacs(MDModel mdModel, StreamWriter sacsFile, ref string status)
+        {
+            foreach (KeyValuePair<int, Vector3> entry in mdModel.connectList)
+            {
+                string connectID = "id=\"" + "C" + entry.Key.ToString() + "\"";
+                string connectCoord = "coord=(" + entry.Value.X.ToString() + "," + entry.Value.Y.ToString() + "," + entry.Value.Z.ToString() + ")";
+                sacsFile.WriteLine("c" + entry.Key.ToString() + " = " + "model.AddJoint(" + connectID + "," + connectCoord + ")");
+            }
 
+            //fake member group for mooring lines
+            string sectionID = "mlGroup";
+            sacsFile.WriteLine(sectionID + " = model.AddMemberGroup(\"MLG" + "\")");
+            sacsFile.WriteLine(sectionID + ".AddSegment(Tube={\'OD\':" + "10" + ", \"T\":" + "1" + "})");
+
+            foreach (KeyValuePair<int, int[]> entry in mdModel.lineNodeList)
+            {
+                sacsFile.WriteLine("model.AddMember(" + "c" + entry.Value[0].ToString() + ", c" + entry.Value[1].ToString() + ", " + "mlGroup" + ")");
+            }
+
+        }
     }
 }
