@@ -26,7 +26,8 @@ namespace ConvertFast
             Elast,
             Hydro,
             Mooring,
-            Sub
+            Sub,
+            Servo
         }
 
         FstModel fstModel = new FstModel();
@@ -106,6 +107,13 @@ namespace ConvertFast
                     rowIndex += 1;
                     dicFastModules.Add(rowIndex, FastModule.Mooring);
                 }
+                if (GetCompServoInfo(fstModel.CompServo, ref included, ref feature, ref module, ref fileName))
+                {
+                    fstModel.convertServo = included;
+                    dgvFastInputFiles.Rows.Add(included, feature, module, fileName);
+                    rowIndex += 1;
+                    dicFastModules.Add(rowIndex, FastModule.Servo);
+                }
 
                 SetModifiableCells();
 
@@ -137,6 +145,10 @@ namespace ConvertFast
             {
                 fstModel.mdModel = new MDModel();
                 fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status);
+            }
+            if (fstModel.convertServo)
+            {
+                //add code
             }
 
 
@@ -293,7 +305,7 @@ namespace ConvertFast
             feature = "";
             module = "";
             fileName = "";
-            if (CompMooring == 0 || CompMooring > 5)
+            if (CompMooring == 0 || CompMooring > 4)
             {
                 return false;
             }
@@ -326,6 +338,29 @@ namespace ConvertFast
                     feature = "Mooring system";
                     module = "OrcaFlex";
                     fileName = fstModel.MooringFile;
+                }
+                return true;
+            }
+        }
+
+        private bool GetCompServoInfo(int? CompServo, ref bool included, ref string feature, ref string module, ref string fileName)
+        {
+            included = false;
+            feature = "";
+            module = "";
+            fileName = "";
+            if (CompServo == 0 || CompServo > 1)
+            {
+                return false;
+            }
+            else
+            {
+                if (CompServo == 1)
+                {
+                    included = false;
+                    feature = "Control and electrical-drive dynamics";
+                    module = "ServoDyn";
+                    fileName = fstModel.ServoFile;
                 }
                 return true;
             }

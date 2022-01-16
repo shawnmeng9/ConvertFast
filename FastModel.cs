@@ -21,18 +21,21 @@ namespace ConvertFast
         public string AeroFile { get; set; }
         public string MooringFile { get; set; }
         public string SubFile { get; set; }
+        public string ServoFile { get; set; }
 
         public int? CompElast { get; set; }
         public int? CompAero { get; set; }
         public int? CompHydro { get; set; }
         public int? CompMooring { get; set; }
         public int? CompSub { get; set; }
+        public int? CompServo { get; set; }
 
         public bool convertElast { get; set; }
         public bool convertAero { get; set; }
         public bool convertHydro { get; set; }
         public bool convertSub { get; set; }
         public bool convertMooring { get; set; }
+        public bool convertServo { get; set; }
 
         public FstModel()
         {
@@ -77,6 +80,10 @@ namespace ConvertFast
                 {
                     CompSub = Int32.Parse(oneInput[0]);
                 }
+                else if (oneInput.Length >= 2 && oneInput[1] == "CompServo")
+                {
+                    CompServo = Int32.Parse(oneInput[0]);
+                }
                 else if (oneInput.Length >= 2 && oneInput[1] == "EDFile")
                 {
                     EDFile = oneInput[0];
@@ -101,6 +108,11 @@ namespace ConvertFast
                 {
                     SubFile = oneInput[0];
                     SubFile = filePath + "\\" + SubFile.Replace("\"", "");
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "ServoFile")
+                {
+                    ServoFile = oneInput[0];
+                    ServoFile = filePath + "\\" + ServoFile.Replace("\"", "");
                 }
                 else
                 {
@@ -535,11 +547,6 @@ namespace ConvertFast
             }
             return connectType;
         }
-
-
-
-
-
     }
 
 
