@@ -129,7 +129,8 @@ namespace ConvertFast
             }
             if (fstModel.convertAero)
             {
-                //add code
+                fstModel.adModel = new ADModel();
+                fstModel.adModel.ParseADInputFile(fstModel.AeroFile, status);
             }
             if (fstModel.convertHydro)
             {
@@ -237,9 +238,9 @@ namespace ConvertFast
                 }
                 else if (CompAero == 2)
                 {
-                    included = false;
+                    included = true;
                     feature = "Aerodynamics";
-                    module = "AeroDyn v14";
+                    module = "AeroDyn v15";
                     fileName = fstModel.AeroFile;
                 }
                 return true;
@@ -372,7 +373,7 @@ namespace ConvertFast
             {
                 row.ReadOnly = true;
                 row.Cells["colIncluded"].Style.BackColor = Color.Gray;
-                if (dicFastModules[row.Index] == FastModule.Hydro || dicFastModules[row.Index] == FastModule.Sub || dicFastModules[row.Index] == FastModule.Mooring)
+                if (dicFastModules[row.Index] == FastModule.Hydro || dicFastModules[row.Index] == FastModule.Sub || dicFastModules[row.Index] == FastModule.Mooring || dicFastModules[row.Index] == FastModule.Aero)
                 {
                     row.Cells["colIncluded"].ReadOnly = false;
                     row.Cells["colIncluded"].Style.BackColor = Color.White;

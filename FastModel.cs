@@ -13,6 +13,7 @@ namespace ConvertFast
         public HDModel hdModel { get; set; }
         public SDModel sdModel { get; set; }
         public MDModel mdModel { get; set; }
+        public ADModel adModel { get; set; }
 
         public string fstFile { get; set; }
         public string filePath { get; set; }
@@ -42,6 +43,7 @@ namespace ConvertFast
             hdModel = new HDModel();
             sdModel = new SDModel();
             mdModel = new MDModel();
+            adModel = new ADModel();
 
             convertElast = false;
             convertAero = false;
@@ -546,6 +548,78 @@ namespace ConvertFast
                 //error, not supported yet
             }
             return connectType;
+        }
+    }
+
+    public class ADModel
+    {
+        int NumTwrNds = 0;
+        public IDictionary<int, double[]> twrNodeList = new Dictionary<int, double[]> { };
+        public string adFile = "";
+
+        public ADModel()
+        {
+            twrNodeList = new Dictionary<int, double[]> { };
+            adFile = "";
+        }
+
+        public void ParseADInputFile(string fileName_AD, string status)
+        {
+            adFile = fileName_AD;
+            var lines = File.ReadAllLines(adFile);
+            bool isTwrNd = false;
+            int twrNdLineNo = 0;
+            int twrNdID = 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                if (oneInput.Length >= 2 && oneInput[1] == "NumTwrNds")
+                {
+                    NumTwrNds = Int32.Parse(oneInput[0]);
+                    isTwrNd = true;
+                    continue;
+                }
+
+                if (isTwrNd)
+                {
+                    if (twrNdLineNo < 2)
+                    {
+                        twrNdLineNo++;
+                        continue;
+                    }
+                    else
+                    {
+                        double TwrElev = 0.0;
+                        double TwrDiam = 0.0;
+                        double[] twrNdProp = new double[] { TwrElev, TwrDiam };
+                        if (twrNdID == 0)
+                        {
+                            double TwrElev0 = 0.0;
+                            double TwrDiam0 = double.Parse(oneInput[1]);
+                            double[] twrNdProp0 = new double[] { TwrElev0, TwrDiam0 };
+                            twrNodeList.Add(twrNdID, twrNdProp0);
+                            twrNdID++;
+                        }
+
+                        TwrElev = double.Parse(oneInput[0]);
+                        TwrDiam = double.Parse(oneInput[1]);
+                        twrNdProp[0] = TwrElev;
+                        twrNdProp[1] = TwrDiam;
+                        twrNodeList.Add(twrNdID, twrNdProp);
+                        twrNdID++;
+                        twrNdLineNo++;
+
+                        if (twrNdLineNo == NumTwrNds + 2)
+                        {
+                            isTwrNd = false;
+                        }
+                    }
+                }
+
+            }
+
+
         }
     }
 
