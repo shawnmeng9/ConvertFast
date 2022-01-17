@@ -64,7 +64,7 @@ namespace ConvertFast
                 ismNode.Location = ismApi.GeometryApi.NewPoint3D(entry.Value.X, entry.Value.Y, entry.Value.Z);
             }
 
-            foreach (KeyValuePair<int, double[]> entry in hdModel.sectionList)
+            foreach (KeyValuePair<int, List<double>> entry in hdModel.sectionList)
             {
                 IIsmParametricSection ismSection;
                 ismSection = ismModel.AddParametricSection(null, IsmParametricShapeKind.HollowCircle);
@@ -72,7 +72,7 @@ namespace ConvertFast
                 ismSection.Name = "SECTION" + entry.Key.ToString();
             }
 
-            foreach (KeyValuePair<int, int[]> entry in hdModel.memberList)
+            foreach (KeyValuePair<int, List<int>> entry in hdModel.memberList)
             {
                 IIsmCurveMember ismBeam;
                 ismBeam = ismModel.AddCurveMember(null);
@@ -134,7 +134,7 @@ namespace ConvertFast
                 ismNode.Location = ismApi.GeometryApi.NewPoint3D(entry.Value.X, entry.Value.Y, entry.Value.Z);
             }
 
-            foreach (KeyValuePair<int, double[]> entry in sdModel.sectionList)
+            foreach (KeyValuePair<int, List<double>> entry in sdModel.sectionList)
             {
                 IIsmParametricSection ismSection;
                 ismSection = ismModel.AddParametricSection(null, IsmParametricShapeKind.HollowCircle);
@@ -142,7 +142,7 @@ namespace ConvertFast
                 ismSection.Name = "SECTION" + entry.Key.ToString();
             }
 
-            foreach (KeyValuePair<int, int[]> entry in sdModel.memberList)
+            foreach (KeyValuePair<int, List<int>> entry in sdModel.memberList)
             {
                 IIsmCurveMember ismBeam;
                 ismBeam = ismModel.AddCurveMember(null);
@@ -203,7 +203,7 @@ namespace ConvertFast
                 ismNode.Location = ismApi.GeometryApi.NewPoint3D(entry.Value.X, entry.Value.Y, entry.Value.Z);
             }
 
-            foreach (KeyValuePair<int, int[]> entry in mdModel.lineNodeList)
+            foreach (KeyValuePair<int, List<int>> entry in mdModel.lineNodeList)
             {
                 IIsmCurveMember ismBeam;
                 ismBeam = ismModel.AddCurveMember(null);
@@ -248,7 +248,7 @@ namespace ConvertFast
         {
             var ismTwrSectList = new List<IIsmParametricSection>();
 
-            foreach (KeyValuePair<int, double[]> entry in adModel.twrNodeList)
+            foreach (KeyValuePair<int, List<double>> entry in adModel.twrNodeList)
             {
                 IIsmNode ismNode;
                 ismNode = ismModel.AddNode(null);
@@ -262,7 +262,7 @@ namespace ConvertFast
                 ismTwrSectList.Add(ismSection);
             }
             
-            for (int i = 0; i < adModel.twrNodeList.Count-2; i++)
+            for (int i = 0; i < adModel.twrNodeList.Count-1; i++)
             {
                 var item = adModel.twrNodeList.ElementAt(i);
                 var item2 = adModel.twrNodeList.ElementAt(i+1);

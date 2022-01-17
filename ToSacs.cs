@@ -63,7 +63,7 @@ namespace ConvertFast
 
             sacsFile.WriteLine("");
 
-            foreach (KeyValuePair<int, double[]> entry in hdModel.sectionList)
+            foreach (KeyValuePair<int, List<double>> entry in hdModel.sectionList)
             {
                 string sectionID = "mg" + entry.Key.ToString();
                 double diameterInCm = entry.Value[0] * 100.0;
@@ -72,7 +72,7 @@ namespace ConvertFast
                 sacsFile.WriteLine(sectionID + ".AddSegment(Tube={\'OD\':" + diameterInCm.ToString() + ", \"T\":" + thicknessInCm.ToString() + "})");
             }
 
-            foreach (KeyValuePair<int, int[]> entry in hdModel.memberList)
+            foreach (KeyValuePair<int, List<int>> entry in hdModel.memberList)
             {
                 sacsFile.WriteLine("model.AddMember(" + "j" + entry.Value[0].ToString() + ", j" + entry.Value[1].ToString() + ", " + "mg" + entry.Value[2].ToString() + ")");
             }
@@ -93,7 +93,7 @@ namespace ConvertFast
 
             sacsFile.WriteLine("");
 
-            foreach (KeyValuePair<int, double[]> entry in sdModel.sectionList)
+            foreach (KeyValuePair<int, List<double>> entry in sdModel.sectionList)
             {
                 string sectionID = "mg" + entry.Key.ToString();
                 double diameterInCm = entry.Value[0] * 100.0;
@@ -102,7 +102,7 @@ namespace ConvertFast
                 sacsFile.WriteLine(sectionID + ".AddSegment(Tube={\'OD\':" + diameterInCm.ToString() + ", \"T\":" + thicknessInCm.ToString() + "})");
             }
 
-            foreach (KeyValuePair<int, int[]> entry in sdModel.memberList)
+            foreach (KeyValuePair<int, List<int>> entry in sdModel.memberList)
             {
                 sacsFile.WriteLine("model.AddMember(" + "j" + entry.Value[0].ToString() + ", j" + entry.Value[1].ToString() + ", " + "mg" + entry.Value[2].ToString() + ")");
             }
@@ -122,7 +122,7 @@ namespace ConvertFast
             sacsFile.WriteLine(sectionID + " = model.AddMemberGroup(\"MLG" + "\")");
             sacsFile.WriteLine(sectionID + ".AddSegment(Tube={\'OD\':" + "10" + ", \"T\":" + "1" + "})");
 
-            foreach (KeyValuePair<int, int[]> entry in mdModel.lineNodeList)
+            foreach (KeyValuePair<int, List<int>> entry in mdModel.lineNodeList)
             {
                 sacsFile.WriteLine("model.AddMember(" + "c" + entry.Value[0].ToString() + ", c" + entry.Value[1].ToString() + ", " + "mlGroup" + ")");
             }

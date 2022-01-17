@@ -132,15 +132,15 @@ namespace ConvertFast
         int NMembers = 0;
         int NPropSets = 0;
         public IDictionary<int, Vector3> jointList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, int[]> memberList = new Dictionary<int, int[]> { };
-        public IDictionary<int, double[]> sectionList = new Dictionary<int, double[]> { };
+        public IDictionary<int, List<int>> memberList = new Dictionary<int, List<int>> { };
+        public IDictionary<int, List<double>> sectionList = new Dictionary<int, List<double>> { };
         public string hdFile = "";
 
         public HDModel()
         {
             jointList = new Dictionary<int, Vector3> { };
-            memberList = new Dictionary<int, int[]> { };
-            sectionList = new Dictionary<int, double[]> { };
+            memberList = new Dictionary<int, List<int>> { };
+            sectionList = new Dictionary<int, List<double>> { };
             hdFile = "";
         }
 
@@ -183,9 +183,6 @@ namespace ConvertFast
                         jointList.Add(jointID, jointCoord);
                         jointLineNo++;
 
-
-                        status = jointID.ToString() + " " + jointX.ToString() + " " + jointY.ToString() + " " + jointZ.ToString();
-
                         if (jointLineNo == NJoints + 2)
                         {
                             isJoint = false;
@@ -215,7 +212,7 @@ namespace ConvertFast
                         int sectID1 = Int32.Parse(oneInput[3]);
                         int sectID2 = Int32.Parse(oneInput[4]);
 
-                        int[] memberProp = new int[] { jointID1, jointID2, sectID1, sectID2 };
+                        var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
 
                         memberList.Add(memberID, memberProp);
                         memberLineNo++;
@@ -250,7 +247,7 @@ namespace ConvertFast
                         double diameter = double.Parse(oneInput[1]);
                         double thickness = double.Parse(oneInput[2]);
 
-                        double[] sectionProp = new double[] { diameter, thickness };
+                        var sectionProp = new List<double> { diameter, thickness };
 
                         sectionList.Add(sectionID, sectionProp);
                         sectionLineNo++;
@@ -273,8 +270,8 @@ namespace ConvertFast
         int NMembers = 0;
         int NPropSets = 0;
         public IDictionary<int, Vector3> jointList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, int[]> memberList = new Dictionary<int, int[]> { };
-        public IDictionary<int, double[]> sectionList = new Dictionary<int, double[]> { };
+        public IDictionary<int, List<int>> memberList = new Dictionary<int, List<int>> { };
+        public IDictionary<int, List<double>> sectionList = new Dictionary<int, List<double>> { };
         public string sdFile = "";
 
         public SDModel()
@@ -352,7 +349,7 @@ namespace ConvertFast
                         int sectID1 = Int32.Parse(oneInput[3]);
                         int sectID2 = Int32.Parse(oneInput[4]);
 
-                        int[] memberProp = new int[] { jointID1, jointID2, sectID1, sectID2 };
+                        var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
 
                         memberList.Add(memberID, memberProp);
                         memberLineNo++;
@@ -387,7 +384,7 @@ namespace ConvertFast
                         double diameter = double.Parse(oneInput[4]);
                         double thickness = double.Parse(oneInput[5]);
 
-                        double[] sectionProp = new double[] { diameter, thickness };
+                        var sectionProp = new List<double> { diameter, thickness };
 
                         sectionList.Add(sectionID, sectionProp);
                         propSetLineNo++;
@@ -420,7 +417,7 @@ namespace ConvertFast
         public IDictionary<int, Vector3> connectFixedList = new Dictionary<int, Vector3> { };
         public IDictionary<int, Vector3> connectVesselList = new Dictionary<int, Vector3> { };
         int NLines = 0;
-        public IDictionary<int, int[]> lineNodeList = new Dictionary<int, int[]> { };
+        public IDictionary<int, List<int>> lineNodeList = new Dictionary<int, List<int>> { };
 
         public string mdFile = "";
 
@@ -431,7 +428,7 @@ namespace ConvertFast
             connectFixedList = new Dictionary<int, Vector3> { };
             connectVesselList = new Dictionary<int, Vector3> { };
             NLines = 0;
-            lineNodeList = new Dictionary<int, int[]> { };
+            lineNodeList = new Dictionary<int, List<int>> { };
         }
 
         public void ParseMDInputFile(string fileName_MD, string status)
@@ -510,7 +507,7 @@ namespace ConvertFast
                         int lineNodeAnch = Int32.Parse(oneInput[4]);
                         int lineNodeFair = Int32.Parse(oneInput[5]);
 
-                        int[] lineNodes = new int[] { lineNodeAnch, lineNodeFair };
+                        var lineNodes = new List<int> { lineNodeAnch, lineNodeFair };
                         lineNodeList.Add(lineID, lineNodes);
 
                         lineLineNo++;
@@ -554,12 +551,12 @@ namespace ConvertFast
     public class ADModel
     {
         int NumTwrNds = 0;
-        public IDictionary<int, double[]> twrNodeList = new Dictionary<int, double[]> { };
+        public IDictionary<int, List<double>> twrNodeList = new Dictionary<int, List<double>> { };
         public string adFile = "";
 
         public ADModel()
         {
-            twrNodeList = new Dictionary<int, double[]> { };
+            twrNodeList = new Dictionary<int, List<double>> { };
             adFile = "";
         }
 
@@ -592,12 +589,12 @@ namespace ConvertFast
                     {
                         double TwrElev = 0.0;
                         double TwrDiam = 0.0;
-                        double[] twrNdProp = new double[] { TwrElev, TwrDiam };
+                        var twrNdProp = new List<double> { TwrElev, TwrDiam };
                         if (twrNdID == 0)
                         {
                             double TwrElev0 = 0.0;
                             double TwrDiam0 = double.Parse(oneInput[1]);
-                            double[] twrNdProp0 = new double[] { TwrElev0, TwrDiam0 };
+                            var twrNdProp0 = new List<double> { TwrElev0, TwrDiam0 };
                             twrNodeList.Add(twrNdID, twrNdProp0);
                             twrNdID++;
                         }
