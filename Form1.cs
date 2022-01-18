@@ -50,6 +50,8 @@ namespace ConvertFast
             openD.Filter = "FAST Input File (.fst)|*.fst";
             if (openD.ShowDialog() == DialogResult.OK)
             {
+                fstModel = new FstModel();
+
                 fileName_fst = openD.FileName;
                 fstModel.filePath = System.IO.Path.GetDirectoryName(openD.FileName);
                 fstModel.ParseFstInputFile(fileName_fst, status);
@@ -117,7 +119,10 @@ namespace ConvertFast
 
                 SetModifiableCells();
 
-
+                if (dgvFastInputFiles.RowCount > 0 && dgvFastInputFiles.ColumnCount > 0)
+                {
+                    dgvFastInputFiles.CurrentCell = dgvFastInputFiles.Rows[0].Cells[1];
+                }
             }
         }
 

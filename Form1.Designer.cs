@@ -41,10 +41,11 @@ namespace ConvertFast
             // 
             // bSelectFile
             // 
-            this.bSelectFile.Location = new System.Drawing.Point(68, 28);
-            this.bSelectFile.Margin = new System.Windows.Forms.Padding(4);
+            this.bSelectFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.bSelectFile.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bSelectFile.Location = new System.Drawing.Point(51, 23);
             this.bSelectFile.Name = "bSelectFile";
-            this.bSelectFile.Size = new System.Drawing.Size(181, 47);
+            this.bSelectFile.Size = new System.Drawing.Size(136, 38);
             this.bSelectFile.TabIndex = 0;
             this.bSelectFile.Text = "Select FAST File";
             this.bSelectFile.UseVisualStyleBackColor = true;
@@ -53,43 +54,44 @@ namespace ConvertFast
             // lbOutputFile
             // 
             this.lbOutputFile.AutoSize = true;
-            this.lbOutputFile.Location = new System.Drawing.Point(88, 346);
-            this.lbOutputFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbOutputFile.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbOutputFile.Location = new System.Drawing.Point(51, 333);
             this.lbOutputFile.Name = "lbOutputFile";
-            this.lbOutputFile.Size = new System.Drawing.Size(77, 17);
+            this.lbOutputFile.Size = new System.Drawing.Size(96, 21);
             this.lbOutputFile.TabIndex = 2;
             this.lbOutputFile.Text = "Output File";
             // 
             // cbOutputFile
             // 
             this.cbOutputFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOutputFile.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbOutputFile.FormattingEnabled = true;
             this.cbOutputFile.Items.AddRange(new object[] {
             "SACS Python API",
             "ISM"});
-            this.cbOutputFile.Location = new System.Drawing.Point(88, 389);
-            this.cbOutputFile.Margin = new System.Windows.Forms.Padding(4);
+            this.cbOutputFile.Location = new System.Drawing.Point(51, 374);
             this.cbOutputFile.Name = "cbOutputFile";
-            this.cbOutputFile.Size = new System.Drawing.Size(160, 24);
+            this.cbOutputFile.Size = new System.Drawing.Size(136, 28);
             this.cbOutputFile.TabIndex = 4;
             this.cbOutputFile.SelectedIndexChanged += new System.EventHandler(this.cbOutputFile_SelectedIndexChanged);
             // 
             // lbStatus
             // 
             this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(679, 59);
-            this.lbStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbStatus.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbStatus.Location = new System.Drawing.Point(713, 35);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(48, 17);
+            this.lbStatus.Size = new System.Drawing.Size(57, 21);
             this.lbStatus.TabIndex = 5;
             this.lbStatus.Text = "Status";
             // 
             // bOk
             // 
-            this.bOk.Location = new System.Drawing.Point(627, 428);
-            this.bOk.Margin = new System.Windows.Forms.Padding(4);
+            this.bOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.bOk.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bOk.Location = new System.Drawing.Point(718, 335);
             this.bOk.Name = "bOk";
-            this.bOk.Size = new System.Drawing.Size(116, 44);
+            this.bOk.Size = new System.Drawing.Size(87, 36);
             this.bOk.TabIndex = 6;
             this.bOk.Text = "OK";
             this.bOk.UseVisualStyleBackColor = true;
@@ -97,10 +99,9 @@ namespace ConvertFast
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(683, 103);
-            this.txtStatus.Margin = new System.Windows.Forms.Padding(4);
+            this.txtStatus.Location = new System.Drawing.Point(718, 84);
             this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(239, 258);
+            this.txtStatus.Size = new System.Drawing.Size(180, 210);
             this.txtStatus.TabIndex = 7;
             this.txtStatus.Text = "";
             // 
@@ -111,20 +112,19 @@ namespace ConvertFast
             this.dgvFastInputFiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvFastInputFiles.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvFastInputFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFastInputFiles.Location = new System.Drawing.Point(68, 103);
-            this.dgvFastInputFiles.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvFastInputFiles.Location = new System.Drawing.Point(51, 84);
             this.dgvFastInputFiles.Name = "dgvFastInputFiles";
             this.dgvFastInputFiles.RowHeadersWidth = 51;
-            this.dgvFastInputFiles.Size = new System.Drawing.Size(524, 185);
+            this.dgvFastInputFiles.Size = new System.Drawing.Size(595, 210);
             this.dgvFastInputFiles.TabIndex = 8;
             this.dgvFastInputFiles.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFastInputFiles_CellValueChanged);
             this.dgvFastInputFiles.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvFastInputFiles_CurrentCellDirtyStateChanged);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(1041, 566);
             this.Controls.Add(this.dgvFastInputFiles);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.bOk);
@@ -132,7 +132,7 @@ namespace ConvertFast
             this.Controls.Add(this.cbOutputFile);
             this.Controls.Add(this.lbOutputFile);
             this.Controls.Add(this.bSelectFile);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Convert FAST";
             ((System.ComponentModel.ISupportInitialize)(this.dgvFastInputFiles)).EndInit();
