@@ -130,7 +130,8 @@ namespace ConvertFast
         {
             if (fstModel.convertElast)
             {
-                //add code
+                fstModel.edModel = new EDModel();
+                fstModel.edModel.ParseEDInputFile(fstModel.EDFile, status);
             }
             if (fstModel.convertAero)
             {
@@ -206,7 +207,7 @@ namespace ConvertFast
             {
                 if (CompElast == 1)
                 {
-                    included = false;
+                    included = true;
                     feature = "Elastic Dynamics";
                     module = "ElastoDyn";
                     fileName = fstModel.EDFile;

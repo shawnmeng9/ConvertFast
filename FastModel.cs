@@ -14,6 +14,7 @@ namespace ConvertFast
         public SDModel sdModel { get; set; }
         public MDModel mdModel { get; set; }
         public ADModel adModel { get; set; }
+        public EDModel edModel { get; set; }
 
         public string fstFile { get; set; }
         public string filePath { get; set; }
@@ -94,27 +95,37 @@ namespace ConvertFast
                 else if (oneInput.Length >= 2 && oneInput[1] == "HydroFile")
                 {
                     HydroFile = oneInput[0];
-                    HydroFile = filePath + "\\" + HydroFile.Replace("\"", "");
+                    //HydroFile = filePath + "\\" + HydroFile.Replace("\"", "");
+                    HydroFile = HydroFile.Replace("\"", "");
+                    HydroFile = Path.GetFullPath(Path.Combine(filePath, HydroFile));
                 }
                 else if (oneInput.Length >= 2 && oneInput[1] == "AeroFile")
                 {
                     AeroFile = oneInput[0];
-                    AeroFile = filePath + "\\" + AeroFile.Replace("\"", "");
+                    //AeroFile = filePath + "\\" + AeroFile.Replace("\"", "");
+                    AeroFile = AeroFile.Replace("\"", "");
+                    AeroFile = Path.GetFullPath(Path.Combine(filePath, AeroFile));
                 }
                 else if (oneInput.Length >= 2 && oneInput[1] == "MooringFile")
                 {
                     MooringFile = oneInput[0];
-                    MooringFile = filePath + "\\" + MooringFile.Replace("\"", "");
+                    //MooringFile = filePath + "\\" + MooringFile.Replace("\"", "");
+                    MooringFile = MooringFile.Replace("\"", "");
+                    MooringFile = Path.GetFullPath(Path.Combine(filePath, MooringFile));
                 }
                 else if (oneInput.Length >= 2 && oneInput[1] == "SubFile")
                 {
                     SubFile = oneInput[0];
-                    SubFile = filePath + "\\" + SubFile.Replace("\"", "");
+                    //SubFile = filePath + "\\" + SubFile.Replace("\"", "");
+                    SubFile = SubFile.Replace("\"", "");
+                    SubFile = Path.GetFullPath(Path.Combine(filePath, SubFile));
                 }
                 else if (oneInput.Length >= 2 && oneInput[1] == "ServoFile")
                 {
                     ServoFile = oneInput[0];
-                    ServoFile = filePath + "\\" + ServoFile.Replace("\"", "");
+                    //ServoFile = filePath + "\\" + ServoFile.Replace("\"", "");
+                    ServoFile = ServoFile.Replace("\"", "");
+                    ServoFile = Path.GetFullPath(Path.Combine(filePath, ServoFile));
                 }
                 else
                 {
@@ -128,16 +139,19 @@ namespace ConvertFast
 
     public class HDModel
     {
-        int NJoints = 0;
-        int NMembers = 0;
-        int NPropSets = 0;
-        public IDictionary<int, Vector3> jointList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, List<int>> memberList = new Dictionary<int, List<int>> { };
-        public IDictionary<int, List<double>> sectionList = new Dictionary<int, List<double>> { };
-        public string hdFile = "";
+        int NJoints { get; set; }
+        int NMembers { get; set; }
+        int NPropSets { get; set; }
+        public IDictionary<int, Vector3> jointList { get; set; }
+        public IDictionary<int, List<int>> memberList { get; set; }
+        public IDictionary<int, List<double>> sectionList { get; set; }
+        string hdFile { get; set; }
 
         public HDModel()
         {
+            NJoints = 0;
+            NMembers = 0;
+            NPropSets = 0;
             jointList = new Dictionary<int, Vector3> { };
             memberList = new Dictionary<int, List<int>> { };
             sectionList = new Dictionary<int, List<double>> { };
@@ -266,17 +280,23 @@ namespace ConvertFast
 
     public class SDModel
     {
-        int NJoints = 0;
-        int NMembers = 0;
-        int NPropSets = 0;
-        public IDictionary<int, Vector3> jointList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, List<int>> memberList = new Dictionary<int, List<int>> { };
-        public IDictionary<int, List<double>> sectionList = new Dictionary<int, List<double>> { };
-        public string sdFile = "";
+        int NJoints { get; set; }
+        int NMembers { get; set; }
+        int NPropSets { get; set; }
+        public IDictionary<int, Vector3> jointList { get; set; }
+        public IDictionary<int, List<int>> memberList { get; set; }
+        public IDictionary<int, List<double>> sectionList { get; set; }
+        string sdFile { get; set; }
 
         public SDModel()
         {
-
+            NJoints = 0;
+            NMembers = 0;
+            NPropSets = 0;
+            jointList = new Dictionary<int, Vector3> { };
+            memberList = new Dictionary<int, List<int>> { };
+            sectionList = new Dictionary<int, List<double>> { };
+            sdFile = "";
         }
 
         public void ParseSDInputFile(string fileName_SD, string status)
@@ -412,14 +432,13 @@ namespace ConvertFast
             Vessel
         }
 
-        int NConnects = 0;
-        public IDictionary<int, Vector3> connectList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, Vector3> connectFixedList = new Dictionary<int, Vector3> { };
-        public IDictionary<int, Vector3> connectVesselList = new Dictionary<int, Vector3> { };
-        int NLines = 0;
-        public IDictionary<int, List<int>> lineNodeList = new Dictionary<int, List<int>> { };
-
-        public string mdFile = "";
+        int NConnects { get; set; }
+        public IDictionary<int, Vector3> connectList { get; set; }
+        public IDictionary<int, Vector3> connectFixedList { get; set; }
+        public IDictionary<int, Vector3> connectVesselList { get; set; }
+        int NLines { get; set; }
+        public IDictionary<int, List<int>> lineNodeList { get; set; }
+        string mdFile { get; set; }
 
         public MDModel()
         {
@@ -429,6 +448,7 @@ namespace ConvertFast
             connectVesselList = new Dictionary<int, Vector3> { };
             NLines = 0;
             lineNodeList = new Dictionary<int, List<int>> { };
+            mdFile = "";
         }
 
         public void ParseMDInputFile(string fileName_MD, string status)
@@ -550,19 +570,35 @@ namespace ConvertFast
 
     public class ADModel
     {
-        int NumTwrNds = 0;
-        public IDictionary<int, List<double>> twrNodeList = new Dictionary<int, List<double>> { };
-        public string adFile = "";
+        int NumTwrNds { get; set; }
+        public IDictionary<int, List<double>> twrNodeList { get; set; }
+        string adFile { get; set; }
+        string ADBlFile1 { get; set; }
+        string ADBlFile2 { get; set; }
+        string ADBlFile3 { get; set; }
+
+        public IDictionary<int, List<double>> adBldProp1 { get; set; }
+        public IDictionary<int, List<double>> adBldProp2 { get; set; }
+        public IDictionary<int, List<double>> adBldProp3 { get; set; }
+
 
         public ADModel()
         {
+            NumTwrNds = 0;
             twrNodeList = new Dictionary<int, List<double>> { };
             adFile = "";
+            ADBlFile1 = "";
+            ADBlFile2 = "";
+            ADBlFile3 = "";
+            adBldProp1 = new Dictionary<int, List<double>> { };
+            adBldProp2 = new Dictionary<int, List<double>> { };
+            adBldProp3 = new Dictionary<int, List<double>> { };
         }
 
         public void ParseADInputFile(string fileName_AD, string status)
         {
             adFile = fileName_AD;
+            string filePath = Path.GetDirectoryName(adFile);
             var lines = File.ReadAllLines(adFile);
             bool isTwrNd = false;
             int twrNdLineNo = 0;
@@ -614,10 +650,166 @@ namespace ConvertFast
                     }
                 }
 
+
+                if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(1)")
+                {
+                    ADBlFile1 = oneInput[0];
+                    ADBlFile1 = ADBlFile1.Replace("\"", "");
+                    ADBlFile1 = Path.GetFullPath(Path.Combine(filePath, ADBlFile1));
+                    adBldProp1 = ParseADBladeFile(ADBlFile1);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(2)")
+                {
+                    ADBlFile2 = oneInput[0];
+                    ADBlFile2 = ADBlFile2.Replace("\"", "");
+                    ADBlFile2 = Path.GetFullPath(Path.Combine(filePath, ADBlFile2));
+                    adBldProp2 = ParseADBladeFile(ADBlFile2);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(3)")
+                {
+                    ADBlFile3 = oneInput[0];
+                    ADBlFile3 = ADBlFile3.Replace("\"", "");
+                    ADBlFile3 = Path.GetFullPath(Path.Combine(filePath, ADBlFile3));
+                    adBldProp3 = ParseADBladeFile(ADBlFile3);
+                }
+
             }
 
 
         }
+
+        private static IDictionary<int, List<double>> ParseADBladeFile(string BldFile)
+        {
+            IDictionary<int, List<double>> bldProp = new Dictionary<int, List<double>> { };
+            var lines = File.ReadAllLines(BldFile);
+            int NumBlNds = 0;
+            bool isBlNd = false;
+            int BlNdLineNo = 0;
+            int ID = 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                if (oneInput.Length >= 2 && oneInput[1] == "NumBlNds")
+                {
+                    NumBlNds = Int32.Parse(oneInput[0]);
+                    isBlNd = true;
+                    continue;
+                }
+
+                if (isBlNd)
+                {
+                    if (BlNdLineNo < 2)
+                    {
+                        BlNdLineNo++;
+                        continue;
+                    }
+                    else
+                    {
+                        double BlSpn = double.Parse(oneInput[0]);
+                        double BlCrvAC = double.Parse(oneInput[1]);
+                        double BlSwpAC = double.Parse(oneInput[2]);
+                        double BlCrvAng = double.Parse(oneInput[3]);
+                        double BlTwist = double.Parse(oneInput[4]);
+                        double BlChord = double.Parse(oneInput[5]);
+
+                        var oneProp = new List<double> { BlSpn, BlCrvAC, BlSwpAC, BlCrvAng, BlTwist, BlChord };
+
+                        bldProp.Add(ID, oneProp);
+                        BlNdLineNo++;
+                        ID++;
+
+                        if (BlNdLineNo == NumBlNds + 2)
+                        {
+                            isBlNd = false;
+                        }
+                    }
+                }
+            }
+
+            return bldProp;
+        }
+
+
+    }
+
+    public class EDModel
+    {
+        string edFile { get; set; }
+        public int NumBl { get; set; }
+        public double HubRad { get; set; }
+        public double NacCMxn { get; set; }
+        public double NacCMyn { get; set; }
+        public double NacCMzn { get; set; }
+        string BldFile1 { get; set; }
+        string BldFile2 { get; set; }
+        string BldFile3 { get; set; }
+
+        public EDModel()
+        {
+            edFile = "";
+            NumBl = 0;
+            HubRad = 0.0;
+            NacCMxn = 0.0;
+            NacCMyn = 0.0;
+            NacCMzn = 0.0;
+        }
+
+        public void ParseEDInputFile(string fileName_ED, string status)
+        {
+            edFile = fileName_ED;
+            string filePath = Path.GetDirectoryName(edFile);
+            var lines = File.ReadAllLines(edFile);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                if (oneInput.Length >= 2 && oneInput[1] == "NumBl")
+                {
+                    NumBl = Int32.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "HubRad")
+                {
+                    HubRad = double.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMxn")
+                {
+                    NacCMxn = double.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMyn")
+                {
+                    NacCMyn = double.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMzn")
+                {
+                    NacCMzn = double.Parse(oneInput[0]);
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(1)")
+                {
+                    BldFile1 = oneInput[0];
+                    BldFile1 = BldFile1.Replace("\"", "");
+                    BldFile1 = Path.GetFullPath(Path.Combine(filePath, BldFile1));
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(2)")
+                {
+                    BldFile2 = oneInput[0];
+                    BldFile2 = BldFile2.Replace("\"", "");
+                    BldFile2 = Path.GetFullPath(Path.Combine(filePath, BldFile2));
+                }
+                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(3)")
+                {
+                    BldFile3 = oneInput[0];
+                    BldFile3 = BldFile3.Replace("\"", "");
+                    BldFile3 = Path.GetFullPath(Path.Combine(filePath, BldFile3));
+                }
+                else
+                {
+                    //add more
+                }
+
+            }
+        }
+
     }
 
 

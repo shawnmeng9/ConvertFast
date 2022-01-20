@@ -37,11 +37,11 @@ namespace ConvertFast
             }
             if (fstModel.convertAero)
             {
-                ConvertADToIsm(fstModel.adModel, ismApi, ref ismModel, ref status);
+                ConvertADToIsm(fstModel.adModel, fstModel.edModel, ismApi, ref ismModel, ref status);
             }
             if (fstModel.convertElast)
             {
-                //add code
+                ConvertEDToIsm(fstModel.edModel, ismApi, ref ismModel, ref status);
             }
 
             string repository = fstModel.filePath + "\\" + System.IO.Path.GetFileNameWithoutExtension(fstModel.fstFile) + ".ism.dgn";
@@ -244,7 +244,7 @@ namespace ConvertFast
         }
 
 
-        private static void ConvertADToIsm(ADModel adModel, IIsmApi ismApi, ref IIsmModel ismModel, ref string status)
+        private static void ConvertADToIsm(ADModel adModel, EDModel edModel, IIsmApi ismApi, ref IIsmModel ismModel, ref string status)
         {
             var ismTwrSectList = new List<IIsmParametricSection>();
 
@@ -314,205 +314,273 @@ namespace ConvertFast
 
             }
 
+            ConvertADBladesToIsm(adModel, edModel, ismApi, ref ismModel, ref status);
 
-            //TestFunction(adModel, ismApi, ref ismModel);
         }
 
 
-
-        private static void TestFunction(ADModel adModel, IIsmApi ismApi, ref IIsmModel ismModel)
+        private static void ConvertADBladesToIsm(ADModel adModel, EDModel edModel, IIsmApi ismApi, ref IIsmModel ismModel, ref string status)
         {
-
-            var tempItem = adModel.twrNodeList.ElementAt(adModel.twrNodeList.Count - 1);
-            IIsmNode ismNodeTemp1;
-            ismNodeTemp1 = ismModel.AddNode(null);
-            ismNodeTemp1.Name = "TEMP1";
-            ismNodeTemp1.Location = ismApi.GeometryApi.NewPoint3D(1.9, 0.0, tempItem.Value[0] + 1.75);
-
-            IIsmNode ismNodeTemp2;
-            ismNodeTemp2 = ismModel.AddNode(null);
-            ismNodeTemp2.Name = "TEMP2";
-            ismNodeTemp2.Location = ismApi.GeometryApi.NewPoint3D(1.9 - 5.0, 0.0, tempItem.Value[0] + 1.75);
-
-            IIsmParametricSection ismSectionTemp;
-            ismSectionTemp = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidCircle);
-            ismSectionTemp.SetSolidCircleDimensions(3.0);
-            ismSectionTemp.Name = "TEMPSECT";
-
-            IIsmCurveMember ismBeamTemp;
-            ismBeamTemp = ismModel.AddCurveMember(null);
-            ismBeamTemp.Name = "TEMPMEM";
-
-            IIsmPoint3D startPointTemp = ismApi.GeometryApi.NewPoint3D(ismNodeTemp1.Location.X, ismNodeTemp1.Location.Y, ismNodeTemp1.Location.Z);
-            IIsmPoint3D endPointTemp = ismApi.GeometryApi.NewPoint3D(ismNodeTemp2.Location.X, ismNodeTemp2.Location.Y, ismNodeTemp2.Location.Z);
-            ismBeamTemp.Location = ismApi.GeometryApi.NewLineSegment3D(startPointTemp, endPointTemp);
-            ismNodeTemp1.AddMember(ismBeamTemp);
-            ismNodeTemp2.AddMember(ismBeamTemp);
-
-            ismBeamTemp.Section = ismSectionTemp;
-            ismBeamTemp.Use = IsmCurveMemberUse.Column;
-            ismBeamTemp.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
-            ismBeamTemp.PlacementPoint = IsmSectionPlacementPoint.Centroid;
-            ismBeamTemp.LoadResistance = IsmLoadResistance.GravityAndLateral;
-            ismBeamTemp.MirrorShapeAboutYAxis = false;
-
-            float x = 0;
-            float y = 0;
-            float z = 1;
-            if ((Math.Abs(startPointTemp.X - endPointTemp.X) < 0.000001) && (Math.Abs(startPointTemp.Y - endPointTemp.Y) < 0.000001) && (Math.Abs(startPointTemp.Z - endPointTemp.Z) > 0.000001))
+            if (edModel != null)
             {
-                x = 1;
-                y = 0;
-                z = 0;
+                var twrTopNode = adModel.twrNodeList.ElementAt(adModel.twrNodeList.Count - 1);
+
+                IIsmNode ismNodeRotor1;
+                ismNodeRotor1 = ismModel.AddNode(null);
+                ismNodeRotor1.Name = "RTRND1";
+                ismNodeRotor1.Location = ismApi.GeometryApi.NewPoint3D(edModel.NacCMxn, 0.0, twrTopNode.Value[0] + edModel.NacCMzn);
+
+                IIsmNode ismNodeRotor2;
+                ismNodeRotor2 = ismModel.AddNode(null);
+                ismNodeRotor2.Name = "RTRND2";
+                ismNodeRotor2.Location = ismApi.GeometryApi.NewPoint3D(-twrTopNode.Value[1], 0.0, twrTopNode.Value[0] + edModel.NacCMzn);
+
+                IIsmParametricSection ismSectRotor;
+                ismSectRotor = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidCircle);
+                ismSectRotor.SetSolidCircleDimensions(edModel.HubRad * 2.0);
+                ismSectRotor.Name = "RTRSECT";
+
+                IIsmCurveMember ismBeamRotor;
+                ismBeamRotor = ismModel.AddCurveMember(null);
+                ismBeamRotor.Name = "RTRMEM";
+
+                IIsmPoint3D startPointTemp = ismApi.GeometryApi.NewPoint3D(ismNodeRotor1.Location.X, ismNodeRotor1.Location.Y, ismNodeRotor1.Location.Z);
+                IIsmPoint3D endPointTemp = ismApi.GeometryApi.NewPoint3D(ismNodeRotor2.Location.X, ismNodeRotor2.Location.Y, ismNodeRotor2.Location.Z);
+                ismBeamRotor.Location = ismApi.GeometryApi.NewLineSegment3D(startPointTemp, endPointTemp);
+                ismNodeRotor1.AddMember(ismBeamRotor);
+                ismNodeRotor2.AddMember(ismBeamRotor);
+
+                ismBeamRotor.Section = ismSectRotor;
+                ismBeamRotor.Use = IsmCurveMemberUse.Column;
+                ismBeamRotor.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
+                ismBeamRotor.PlacementPoint = IsmSectionPlacementPoint.Centroid;
+                ismBeamRotor.LoadResistance = IsmLoadResistance.GravityAndLateral;
+                ismBeamRotor.MirrorShapeAboutYAxis = false;
+
+                float x = 0;
+                float y = 0;
+                float z = 1;
+                if ((Math.Abs(startPointTemp.X - endPointTemp.X) < 0.000001) && (Math.Abs(startPointTemp.Y - endPointTemp.Y) < 0.000001) && (Math.Abs(startPointTemp.Z - endPointTemp.Z) > 0.000001))
+                {
+                    x = 1;
+                    y = 0;
+                    z = 0;
+                }
+                ismBeamRotor.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
+
+                if (edModel.NumBl == 3)
+                {
+                    //Blade_1
+                    var bldNdProp11 = adModel.adBldProp1.ElementAt(0);
+                    var bldNdProp1N = adModel.adBldProp1.ElementAt(adModel.adBldProp1.Count - 1);
+                    double bldChord11 = bldNdProp11.Value[5];
+                    double bldChord1N = bldNdProp1N.Value[5];
+                    double bldSpn11 = bldNdProp11.Value[0];
+                    double bldSpn1N = bldNdProp1N.Value[0] - bldSpn11;
+
+                    IIsmNode ismNodeBlade0;
+                    ismNodeBlade0 = ismModel.AddNode(null);
+                    ismNodeBlade0.Name = "BLDND0";
+                    ismNodeBlade0.Location = ismApi.GeometryApi.NewPoint3D(ismNodeRotor1.Location.X + bldChord11 / 2.0, ismNodeRotor1.Location.Y, ismNodeRotor1.Location.Z);
+
+                    IIsmNode ismNodeBlade1;
+                    ismNodeBlade1 = ismModel.AddNode(null);
+                    ismNodeBlade1.Name = "BLDND0";
+                    ismNodeBlade1.Location = ismApi.GeometryApi.NewPoint3D(ismNodeRotor1.Location.X + bldChord11/2.0, ismNodeRotor1.Location.Y, ismNodeRotor1.Location.Z + bldSpn1N);
+
+                    IIsmCurveMember ismBeamBlade1;
+                    ismBeamBlade1 = ismModel.AddCurveMember(null);
+                    ismBeamBlade1.Name = "BLDBEAM1";
+
+                    IIsmParametricSection ismSectBlade11;
+                    ismSectBlade11 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade11.SetSolidRectangleDimensions(bldChord11, 0.2);
+                    ismSectBlade11.Name = "BLDSECT11";
+
+                    IIsmParametricSection ismSectBlade12;
+                    ismSectBlade12 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade12.SetSolidRectangleDimensions(bldChord1N, 0.2);
+                    ismSectBlade12.Name = "BLDSECT12";
+
+                    IIsmVaryingSection ismVarySectBlade1;
+                    ismVarySectBlade1 = ismModel.AddVaryingSection(null);
+                    ismVarySectBlade1.Name = "BLDVSECT1";
+
+                    IIsmVaryingSectionSegment ismSegmentBlade1;
+                    ismSegmentBlade1 = ismVarySectBlade1.AddSegment();
+                    ismSegmentBlade1.Name = "BLDSEG1";
+                    ismSegmentBlade1.StartSection = ismSectBlade11;
+                    ismSegmentBlade1.EndSection = ismSectBlade12;
+
+                    IIsmPoint3D startPointBlade1 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade0.Location.X, ismNodeBlade0.Location.Y, ismNodeBlade0.Location.Z);
+                    IIsmPoint3D endPointBlade1 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade1.Location.X, ismNodeBlade1.Location.Y, ismNodeBlade1.Location.Z);
+                    ismBeamBlade1.Location = ismApi.GeometryApi.NewLineSegment3D(startPointBlade1, endPointBlade1);
+                    ismNodeBlade0.AddMember(ismBeamBlade1);
+                    ismNodeBlade1.AddMember(ismBeamBlade1);
+
+                    ismBeamBlade1.Section = ismVarySectBlade1;
+                    ismBeamBlade1.Use = IsmCurveMemberUse.Column;
+                    ismBeamBlade1.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
+                    ismBeamBlade1.PlacementPoint = IsmSectionPlacementPoint.Centroid;
+                    ismBeamBlade1.LoadResistance = IsmLoadResistance.GravityAndLateral;
+                    ismBeamBlade1.MirrorShapeAboutYAxis = false;
+
+                    x = 0;
+                    y = 0;
+                    z = 1;
+                    if ((Math.Abs(startPointBlade1.X - endPointBlade1.X) < 0.000001) && (Math.Abs(startPointBlade1.Y - endPointBlade1.Y) < 0.000001) && (Math.Abs(startPointBlade1.Z - endPointBlade1.Z) > 0.000001))
+                    {
+                        x = 1;
+                        y = 0;
+                        z = 0;
+                    }
+                    ismBeamBlade1.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
+
+
+                    //Blade_2
+                    var bldNdProp21 = adModel.adBldProp2.ElementAt(0);
+                    var bldNdProp2N = adModel.adBldProp2.ElementAt(adModel.adBldProp2.Count - 1);
+                    double bldChord21 = bldNdProp21.Value[5];
+                    double bldChord2N = bldNdProp2N.Value[5];
+                    double bldSpn21 = bldNdProp21.Value[0];
+                    double bldSpn2N = bldNdProp2N.Value[0] - bldSpn21;
+
+                    IIsmNode ismNodeBlade2;
+                    ismNodeBlade2 = ismModel.AddNode(null);
+                    ismNodeBlade2.Name = "BLDND2";
+                    ismNodeBlade2.Location = ismApi.GeometryApi.NewPoint3D(
+                        ismNodeRotor1.Location.X + bldChord21 / 2.0, 
+                        ismNodeRotor1.Location.Y + bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0), 
+                        ismNodeRotor1.Location.Z - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0));
+
+                    IIsmParametricSection ismSectBlade21;
+                    ismSectBlade21 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade21.SetSolidRectangleDimensions(0.2, bldChord21);
+                    ismSectBlade21.Name = "BLDSECT21";
+
+                    IIsmParametricSection ismSectBlade22;
+                    ismSectBlade22 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade22.SetSolidRectangleDimensions(0.2, bldChord2N);
+                    ismSectBlade22.Name = "BLDSECT22";
+
+                    IIsmVaryingSection ismVarySectBlade2;
+                    ismVarySectBlade2 = ismModel.AddVaryingSection(null);
+                    ismVarySectBlade2.Name = "BLDVSECT2";
+
+                    IIsmVaryingSectionSegment ismSegmentBlade2;
+                    ismSegmentBlade2 = ismVarySectBlade2.AddSegment();
+                    ismSegmentBlade2.Name = "BLDSEG2";
+                    ismSegmentBlade2.StartSection = ismSectBlade21;
+                    ismSegmentBlade2.EndSection = ismSectBlade22;
+
+                    IIsmCurveMember ismBeamBlade2;
+                    ismBeamBlade2 = ismModel.AddCurveMember(null);
+                    ismBeamBlade2.Name = "BLDBEAM2";
+
+                    IIsmPoint3D startPointBlade2 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade0.Location.X, ismNodeBlade0.Location.Y, ismNodeBlade0.Location.Z);
+                    IIsmPoint3D endPointBlade2 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade2.Location.X, ismNodeBlade2.Location.Y, ismNodeBlade2.Location.Z);
+                    ismBeamBlade2.Location = ismApi.GeometryApi.NewLineSegment3D(startPointBlade2, endPointBlade2);
+                    ismNodeBlade0.AddMember(ismBeamBlade2);
+                    ismNodeBlade2.AddMember(ismBeamBlade2);
+
+                    ismBeamBlade2.Section = ismVarySectBlade2;
+                    ismBeamBlade2.Use = IsmCurveMemberUse.Column;
+                    ismBeamBlade2.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
+                    ismBeamBlade2.PlacementPoint = IsmSectionPlacementPoint.Centroid;
+                    ismBeamBlade2.LoadResistance = IsmLoadResistance.GravityAndLateral;
+                    ismBeamBlade2.MirrorShapeAboutYAxis = false;
+
+                    x = 0;
+                    y = 0;
+                    z = 1;
+                    if ((Math.Abs(startPointBlade2.X - endPointBlade2.X) < 0.000001) && (Math.Abs(startPointBlade2.Y - endPointBlade2.Y) < 0.000001) && (Math.Abs(startPointBlade2.Z - endPointBlade2.Z) > 0.000001))
+                    {
+                        x = 1;
+                        y = 0;
+                        z = 0;
+                    }
+                    ismBeamBlade2.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
+
+
+                    //Blade_3
+                    var bldNdProp31 = adModel.adBldProp3.ElementAt(0);
+                    var bldNdProp3N = adModel.adBldProp3.ElementAt(adModel.adBldProp3.Count - 1);
+                    double bldChord31 = bldNdProp31.Value[5];
+                    double bldChord3N = bldNdProp3N.Value[5];
+                    double bldSpn31 = bldNdProp31.Value[0];
+                    double bldSpn3N = bldNdProp3N.Value[0] - bldSpn21;
+
+                    IIsmNode ismNodeBlade3;
+                    ismNodeBlade3 = ismModel.AddNode(null);
+                    ismNodeBlade3.Name = "BLDND3";
+                    ismNodeBlade3.Location = ismApi.GeometryApi.NewPoint3D(
+                        ismNodeRotor1.Location.X + bldChord21 / 2.0,
+                        ismNodeRotor1.Location.Y - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0),
+                        ismNodeRotor1.Location.Z - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0));
+
+                    IIsmParametricSection ismSectBlade31;
+                    ismSectBlade31 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade31.SetSolidRectangleDimensions(0.2, bldChord31);
+                    ismSectBlade31.Name = "BLDSECT31";
+
+                    IIsmParametricSection ismSectBlade32;
+                    ismSectBlade32 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
+                    ismSectBlade32.SetSolidRectangleDimensions(0.2, bldChord3N);
+                    ismSectBlade32.Name = "BLDSECT32";
+
+                    IIsmVaryingSection ismVarySectBlade3;
+                    ismVarySectBlade3 = ismModel.AddVaryingSection(null);
+                    ismVarySectBlade3.Name = "BLDVSECT3";
+
+                    IIsmVaryingSectionSegment ismSegmentBlade3;
+                    ismSegmentBlade3 = ismVarySectBlade3.AddSegment();
+                    ismSegmentBlade3.Name = "BLDSEG3";
+                    ismSegmentBlade3.StartSection = ismSectBlade31;
+                    ismSegmentBlade3.EndSection = ismSectBlade32;
+
+                    IIsmCurveMember ismBeamBlade3;
+                    ismBeamBlade3 = ismModel.AddCurveMember(null);
+                    ismBeamBlade3.Name = "BLDBEAM3";
+
+                    IIsmPoint3D startPointBlade3 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade0.Location.X, ismNodeBlade0.Location.Y, ismNodeBlade0.Location.Z);
+                    IIsmPoint3D endPointBlade3 = ismApi.GeometryApi.NewPoint3D(ismNodeBlade3.Location.X, ismNodeBlade3.Location.Y, ismNodeBlade3.Location.Z);
+                    ismBeamBlade3.Location = ismApi.GeometryApi.NewLineSegment3D(startPointBlade3, endPointBlade3);
+                    ismNodeBlade0.AddMember(ismBeamBlade3);
+                    ismNodeBlade3.AddMember(ismBeamBlade3);
+
+                    ismBeamBlade3.Section = ismVarySectBlade3;
+                    ismBeamBlade3.Use = IsmCurveMemberUse.Column;
+                    ismBeamBlade3.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
+                    ismBeamBlade3.PlacementPoint = IsmSectionPlacementPoint.Centroid;
+                    ismBeamBlade3.LoadResistance = IsmLoadResistance.GravityAndLateral;
+                    ismBeamBlade3.MirrorShapeAboutYAxis = false;
+
+                    x = 0;
+                    y = 0;
+                    z = 1;
+                    if ((Math.Abs(startPointBlade3.X - endPointBlade3.X) < 0.000001) && (Math.Abs(startPointBlade3.Y - endPointBlade3.Y) < 0.000001) && (Math.Abs(startPointBlade3.Z - endPointBlade3.Z) > 0.000001))
+                    {
+                        x = 1;
+                        y = 0;
+                        z = 0;
+                    }
+                    ismBeamBlade3.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
+
+                }
+
             }
-            ismBeamTemp.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
-
-            IIsmNode ismNodeTemp11;
-            ismNodeTemp11 = ismModel.AddNode(null);
-            ismNodeTemp11.Name = "TEMP11";
-            ismNodeTemp11.Location = ismApi.GeometryApi.NewPoint3D(ismNodeTemp1.Location.X + 1.771, ismNodeTemp1.Location.Y, ismNodeTemp1.Location.Z);
-
-            IIsmNode ismNodeTemp3;
-            ismNodeTemp3 = ismModel.AddNode(null);
-            ismNodeTemp3.Name = "TEMP3";
-            ismNodeTemp3.Location = ismApi.GeometryApi.NewPoint3D(ismNodeTemp1.Location.X+1.771, ismNodeTemp1.Location.Y+62.5, ismNodeTemp1.Location.Z-30.0);
-
-            IIsmParametricSection ismSection1;
-            ismSection1 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
-            ismSection1.SetSolidRectangleDimensions(0.2, 3.542);
-            ismSection1.Name = "BLDSECT1";
-
-            IIsmParametricSection ismSection2;
-            ismSection2 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
-            ismSection2.SetSolidRectangleDimensions(0.2, 1.419);
-            ismSection2.Name = "BLDSECT2";
-
-            IIsmVaryingSection ismVarySect;
-            ismVarySect = ismModel.AddVaryingSection(null);
-            ismVarySect.Name = "TEMPVSECT";
-
-            IIsmVaryingSectionSegment ismSegment;
-            ismSegment = ismVarySect.AddSegment();
-            ismSegment.Name = "TEMPSEG";
-            ismSegment.StartSection = ismSection1;
-            ismSegment.EndSection = ismSection2;
-
-            IIsmCurveMember ismBeamTemp2;
-            ismBeamTemp2 = ismModel.AddCurveMember(null);
-            ismBeamTemp2.Name = "TEMPMEM2";
-
-            IIsmPoint3D startPointTemp2 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp11.Location.X, ismNodeTemp11.Location.Y, ismNodeTemp11.Location.Z);
-            IIsmPoint3D endPointTemp2 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp3.Location.X, ismNodeTemp3.Location.Y, ismNodeTemp3.Location.Z);
-            ismBeamTemp2.Location = ismApi.GeometryApi.NewLineSegment3D(startPointTemp2, endPointTemp2);
-            ismNodeTemp11.AddMember(ismBeamTemp2);
-            ismNodeTemp3.AddMember(ismBeamTemp2);
-
-            ismBeamTemp2.Section = ismVarySect;
-            ismBeamTemp2.Use = IsmCurveMemberUse.Column;
-            ismBeamTemp2.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
-            ismBeamTemp2.PlacementPoint = IsmSectionPlacementPoint.Centroid;
-            ismBeamTemp2.LoadResistance = IsmLoadResistance.GravityAndLateral;
-            ismBeamTemp2.MirrorShapeAboutYAxis = false;
-
-            x = 0;
-            y = 0;
-            z = 1;
-            if ((Math.Abs(startPointTemp2.X - endPointTemp2.X) < 0.000001) && (Math.Abs(startPointTemp2.Y - endPointTemp2.Y) < 0.000001) && (Math.Abs(startPointTemp2.Z - endPointTemp2.Z) > 0.000001))
+            else
             {
-                x = 1;
-                y = 0;
-                z = 0;
+                //ED Model is null. Add error information that blades can't be visualized.
+                return;
             }
-            ismBeamTemp2.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
 
 
+        }
 
-            IIsmNode ismNodeTemp4;
-            ismNodeTemp4 = ismModel.AddNode(null);
-            ismNodeTemp4.Name = "TEMP4";
-            ismNodeTemp4.Location = ismApi.GeometryApi.NewPoint3D(ismNodeTemp1.Location.X+1.771, ismNodeTemp1.Location.Y-62.5, ismNodeTemp1.Location.Z-30.0);
-
-            IIsmCurveMember ismBeamTemp3;
-            ismBeamTemp3 = ismModel.AddCurveMember(null);
-            ismBeamTemp3.Name = "TEMPMEM3";
-
-            IIsmPoint3D startPointTemp3 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp11.Location.X, ismNodeTemp11.Location.Y, ismNodeTemp11.Location.Z);
-            IIsmPoint3D endPointTemp3 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp4.Location.X, ismNodeTemp4.Location.Y, ismNodeTemp4.Location.Z);
-            ismBeamTemp3.Location = ismApi.GeometryApi.NewLineSegment3D(startPointTemp3, endPointTemp3);
-            ismNodeTemp11.AddMember(ismBeamTemp3);
-            ismNodeTemp4.AddMember(ismBeamTemp3);
-
-            ismBeamTemp3.Section = ismVarySect;
-            ismBeamTemp3.Use = IsmCurveMemberUse.Column;
-            ismBeamTemp3.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
-            ismBeamTemp3.PlacementPoint = IsmSectionPlacementPoint.Centroid;
-            ismBeamTemp3.LoadResistance = IsmLoadResistance.GravityAndLateral;
-            ismBeamTemp3.MirrorShapeAboutYAxis = false;
-
-            x = 0;
-            y = 0;
-            z = 1;
-            if ((Math.Abs(startPointTemp2.X - endPointTemp2.X) < 0.000001) && (Math.Abs(startPointTemp2.Y - endPointTemp2.Y) < 0.000001) && (Math.Abs(startPointTemp2.Z - endPointTemp2.Z) > 0.000001))
-            {
-                x = 1;
-                y = 0;
-                z = 0;
-            }
-            ismBeamTemp3.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
-
-
-            IIsmNode ismNodeTemp5;
-            ismNodeTemp5 = ismModel.AddNode(null);
-            ismNodeTemp5.Name = "TEMP5";
-            ismNodeTemp5.Location = ismApi.GeometryApi.NewPoint3D(ismNodeTemp1.Location.X+1.771, ismNodeTemp1.Location.Y, ismNodeTemp1.Location.Z + 62.5);
-
-            IIsmCurveMember ismBeamTemp4;
-            ismBeamTemp4 = ismModel.AddCurveMember(null);
-            ismBeamTemp4.Name = "TEMPMEM4";
-
-            IIsmParametricSection ismSection3;
-            ismSection3 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
-            ismSection3.SetSolidRectangleDimensions(3.542, 0.2);
-            ismSection3.Name = "BLDSECT3";
-
-            IIsmParametricSection ismSection4;
-            ismSection4 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
-            ismSection4.SetSolidRectangleDimensions(1.419, 0.2);
-            ismSection4.Name = "BLDSECT4";
-
-            IIsmVaryingSection ismVarySect2;
-            ismVarySect2 = ismModel.AddVaryingSection(null);
-            ismVarySect2.Name = "TEMPVSECT2";
-
-            IIsmVaryingSectionSegment ismSegment2;
-            ismSegment2 = ismVarySect2.AddSegment();
-            ismSegment2.Name = "TEMPSEG2";
-            ismSegment2.StartSection = ismSection3;
-            ismSegment2.EndSection = ismSection4;
-
-            IIsmPoint3D startPointTemp4 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp11.Location.X, ismNodeTemp11.Location.Y, ismNodeTemp11.Location.Z);
-            IIsmPoint3D endPointTemp4 = ismApi.GeometryApi.NewPoint3D(ismNodeTemp5.Location.X, ismNodeTemp5.Location.Y, ismNodeTemp5.Location.Z);
-            ismBeamTemp4.Location = ismApi.GeometryApi.NewLineSegment3D(startPointTemp4, endPointTemp4);
-            ismNodeTemp11.AddMember(ismBeamTemp4);
-            ismNodeTemp5.AddMember(ismBeamTemp4);
-
-            ismBeamTemp4.Section = ismVarySect2;
-            ismBeamTemp4.Use = IsmCurveMemberUse.Column;
-            ismBeamTemp4.SystemKind = IsmCurveMemberSystemKind.SteelRolled;
-            ismBeamTemp4.PlacementPoint = IsmSectionPlacementPoint.Centroid;
-            ismBeamTemp4.LoadResistance = IsmLoadResistance.GravityAndLateral;
-            ismBeamTemp4.MirrorShapeAboutYAxis = false;
-
-            x = 0;
-            y = 0;
-            z = 1;
-            if ((Math.Abs(startPointTemp4.X - endPointTemp4.X) < 0.000001) && (Math.Abs(startPointTemp4.Y - endPointTemp4.Y) < 0.000001) && (Math.Abs(startPointTemp4.Z - endPointTemp4.Z) > 0.000001))
-            {
-                x = 1;
-                y = 0;
-                z = 0;
-            }
-            ismBeamTemp4.Orientation = ismApi.GeometryApi.NewPoint3D(x, y, z);
+        private static void ConvertEDToIsm(EDModel edModel, IIsmApi ismApi, ref IIsmModel ismModel, ref string status)
+        {
+            
         }
     }
 }
