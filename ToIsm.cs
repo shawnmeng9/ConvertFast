@@ -385,7 +385,7 @@ namespace ConvertFast
 
                     IIsmNode ismNodeBlade1;
                     ismNodeBlade1 = ismModel.AddNode(null);
-                    ismNodeBlade1.Name = "BLDND0";
+                    ismNodeBlade1.Name = "BLDND1";
                     ismNodeBlade1.Location = ismApi.GeometryApi.NewPoint3D(ismNodeRotor1.Location.X + bldChord11/2.0, ismNodeRotor1.Location.Y, ismNodeRotor1.Location.Z + bldSpn1N);
 
                     IIsmCurveMember ismBeamBlade1;
@@ -450,8 +450,8 @@ namespace ConvertFast
                     ismNodeBlade2.Name = "BLDND2";
                     ismNodeBlade2.Location = ismApi.GeometryApi.NewPoint3D(
                         ismNodeRotor1.Location.X + bldChord21 / 2.0, 
-                        ismNodeRotor1.Location.Y + bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0), 
-                        ismNodeRotor1.Location.Z - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0));
+                        ismNodeRotor1.Location.Y + bldSpn2N * Math.Cos(Math.PI * 30.0 / 180.0), 
+                        ismNodeRotor1.Location.Z - bldSpn2N * Math.Sin(Math.PI * 30.0 / 180.0));
 
                     IIsmParametricSection ismSectBlade21;
                     ismSectBlade21 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
@@ -508,15 +508,15 @@ namespace ConvertFast
                     double bldChord31 = bldNdProp31.Value[5];
                     double bldChord3N = bldNdProp3N.Value[5];
                     double bldSpn31 = bldNdProp31.Value[0];
-                    double bldSpn3N = bldNdProp3N.Value[0] - bldSpn21;
+                    double bldSpn3N = bldNdProp3N.Value[0] - bldSpn31;
 
                     IIsmNode ismNodeBlade3;
                     ismNodeBlade3 = ismModel.AddNode(null);
                     ismNodeBlade3.Name = "BLDND3";
                     ismNodeBlade3.Location = ismApi.GeometryApi.NewPoint3D(
-                        ismNodeRotor1.Location.X + bldChord21 / 2.0,
-                        ismNodeRotor1.Location.Y - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0),
-                        ismNodeRotor1.Location.Z - bldSpn2N * Math.Sin(Math.PI * 45.0 / 180.0));
+                        ismNodeRotor1.Location.X + bldChord31 / 2.0,
+                        ismNodeRotor1.Location.Y - bldSpn3N * Math.Cos(Math.PI * 30.0 / 180.0),
+                        ismNodeRotor1.Location.Z - bldSpn3N * Math.Sin(Math.PI * 30.0 / 180.0));
 
                     IIsmParametricSection ismSectBlade31;
                     ismSectBlade31 = ismModel.AddParametricSection(null, IsmParametricShapeKind.SolidRectangle);
