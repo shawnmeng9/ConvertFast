@@ -4,6 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertFast", "ConvertFast.csproj", "{DC1EDC1B-76D6-48EA-92DA-939F1A5A8FDD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E} = {31DF4A85-807D-4357-AF12-D69EF7E62B2E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FASTInputDll", "..\FAST\FASTInterop\FASTInterop\FASTInputDll\FASTInputDll.csproj", "{31DF4A85-807D-4357-AF12-D69EF7E62B2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp_FastInputDll", "..\0_Files\Temp\TestApp_FastInputDll\TestApp_FastInputDll.csproj", "{DE02391E-DF7D-486B-A70F-1F789F125813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +28,22 @@ Global
 		{DC1EDC1B-76D6-48EA-92DA-939F1A5A8FDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC1EDC1B-76D6-48EA-92DA-939F1A5A8FDD}.Release|x64.ActiveCfg = Release|x64
 		{DC1EDC1B-76D6-48EA-92DA-939F1A5A8FDD}.Release|x64.Build.0 = Release|x64
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Debug|x64.Build.0 = Debug|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Release|x64.ActiveCfg = Release|Any CPU
+		{31DF4A85-807D-4357-AF12-D69EF7E62B2E}.Release|x64.Build.0 = Release|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Debug|x64.Build.0 = Debug|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE02391E-DF7D-486B-A70F-1F789F125813}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

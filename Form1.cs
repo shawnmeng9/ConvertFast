@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FASTInputDll;
 
 namespace ConvertFast
 {
@@ -31,10 +32,13 @@ namespace ConvertFast
         }
 
         FstModel fstModel = new FstModel();
+        FstInput fstInput = new FstInput();
         static string fileName_fst = "";
         static string status = "";
         static OutFile outFile;
         static IDictionary<int, FastModule> dicFastModules = new Dictionary<int, FastModule> { };
+
+
 
         public Form1()
         {
@@ -51,10 +55,11 @@ namespace ConvertFast
             if (openD.ShowDialog() == DialogResult.OK)
             {
                 fstModel = new FstModel();
+                fstInput = new FstInput();
 
                 fileName_fst = openD.FileName;
                 fstModel.filePath = System.IO.Path.GetDirectoryName(openD.FileName);
-                fstModel.ParseFstInputFile(fileName_fst, status);
+                fstModel.ParseFstInputFile(fileName_fst, status, ref fstInput);
 
                 DataGridViewCheckBoxColumn chkIncluded = new DataGridViewCheckBoxColumn();
                 chkIncluded.ValueType = typeof(bool);
@@ -131,17 +136,17 @@ namespace ConvertFast
             if (fstModel.convertElast)
             {
                 fstModel.edModel = new EDModel();
-                fstModel.edModel.ParseEDInputFile(fstModel.EDFile, status);
+                fstModel.edModel.ParseEDInputFile(fstModel.EDFile, status, fstInput);
             }
             if (fstModel.convertAero)
             {
                 fstModel.adModel = new ADModel();
-                fstModel.adModel.ParseADInputFile(fstModel.AeroFile, status);
+                fstModel.adModel.ParseADInputFile(fstModel.AeroFile, status, fstInput);
             }
             if (fstModel.convertHydro)
             {
                 fstModel.hdModel = new HDModel();
-                fstModel.hdModel.ParseHDInputFile(fstModel.HydroFile, status);
+                fstModel.hdModel.ParseHDInputFile(fstModel.HydroFile, status, fstInput);
             }
             if (fstModel.convertSub)
             {
@@ -151,7 +156,7 @@ namespace ConvertFast
             if (fstModel.convertMooring)
             {
                 fstModel.mdModel = new MDModel();
-                fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status);
+                fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status, fstInput);
             }
             if (fstModel.convertServo)
             {
@@ -199,7 +204,7 @@ namespace ConvertFast
             feature = "";
             module = "";
             fileName = "";
-            if (CompElast == 0 || CompElast > 2)
+            if (CompElast <= 0 || CompElast > 2)
             {
                 return false;
             }

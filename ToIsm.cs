@@ -60,7 +60,7 @@ namespace ConvertFast
             {
                 IIsmNode ismNode;
                 ismNode = ismModel.AddNode(null);
-                ismNode.Name = "JOINT" + entry.Key.ToString();
+                ismNode.Name = "HD" + entry.Key.ToString();
                 ismNode.Location = ismApi.GeometryApi.NewPoint3D(entry.Value.X, entry.Value.Y, entry.Value.Z);
             }
 
@@ -130,7 +130,7 @@ namespace ConvertFast
             {
                 IIsmNode ismNode;
                 ismNode = ismModel.AddNode(null);
-                ismNode.Name = "JOINT" + entry.Key.ToString();
+                ismNode.Name = "SD" + entry.Key.ToString();
                 ismNode.Location = ismApi.GeometryApi.NewPoint3D(entry.Value.X, entry.Value.Y, entry.Value.Z);
             }
 

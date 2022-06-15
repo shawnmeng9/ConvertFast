@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.IO;
+using FASTInputDll;
 
 namespace ConvertFast
 {
@@ -53,86 +54,24 @@ namespace ConvertFast
             convertMooring = false;
         }
 
-
-        public void ParseFstInputFile(string fileName_fst, string status)
+        public void ParseFstInputFile(string fileName_fst, string status, ref FstInput fst)
         {
+            var filePath = System.IO.Path.GetDirectoryName(fileName_fst);
+            fst.ParseFstInput(fileName_fst, status);
+
             fstFile = fileName_fst;
-            var lines = File.ReadAllLines(fstFile);
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-
-                if (oneInput.Length >= 2 && oneInput[1] == "CompElast")
-                {
-                    CompElast = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "CompAero")
-                {
-                    CompAero = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "CompHydro")
-                {
-                    CompHydro = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "CompMooring")
-                {
-                    CompMooring = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "CompSub")
-                {
-                    CompSub = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "CompServo")
-                {
-                    CompServo = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "EDFile")
-                {
-                    EDFile = oneInput[0];
-                    EDFile = filePath + "\\" + EDFile.Replace("\"", "");
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "HydroFile")
-                {
-                    HydroFile = oneInput[0];
-                    //HydroFile = filePath + "\\" + HydroFile.Replace("\"", "");
-                    HydroFile = HydroFile.Replace("\"", "");
-                    HydroFile = Path.GetFullPath(Path.Combine(filePath, HydroFile));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "AeroFile")
-                {
-                    AeroFile = oneInput[0];
-                    //AeroFile = filePath + "\\" + AeroFile.Replace("\"", "");
-                    AeroFile = AeroFile.Replace("\"", "");
-                    AeroFile = Path.GetFullPath(Path.Combine(filePath, AeroFile));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "MooringFile")
-                {
-                    MooringFile = oneInput[0];
-                    //MooringFile = filePath + "\\" + MooringFile.Replace("\"", "");
-                    MooringFile = MooringFile.Replace("\"", "");
-                    MooringFile = Path.GetFullPath(Path.Combine(filePath, MooringFile));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "SubFile")
-                {
-                    SubFile = oneInput[0];
-                    //SubFile = filePath + "\\" + SubFile.Replace("\"", "");
-                    SubFile = SubFile.Replace("\"", "");
-                    SubFile = Path.GetFullPath(Path.Combine(filePath, SubFile));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "ServoFile")
-                {
-                    ServoFile = oneInput[0];
-                    //ServoFile = filePath + "\\" + ServoFile.Replace("\"", "");
-                    ServoFile = ServoFile.Replace("\"", "");
-                    ServoFile = Path.GetFullPath(Path.Combine(filePath, ServoFile));
-                }
-                else
-                {
-                    //add more
-                }
-            }
-
+            CompElast = fst.CompElast.value;
+            CompAero = fst.CompAero.value;
+            CompHydro = fst.CompHydro.value;
+            CompMooring = fst.CompMooring.value;
+            CompSub = fst.CompSub.value;
+            CompServo = fst.CompServo.value;
+            EDFile = Static_Methods.GetFileFullPath(filePath, fst.EDFile.value);
+            HydroFile = Static_Methods.GetFileFullPath(filePath, fst.HydroFile.value);
+            AeroFile = Static_Methods.GetFileFullPath(filePath, fst.AeroFile.value);
+            MooringFile = Static_Methods.GetFileFullPath(filePath, fst.MooringFile.value);
+            SubFile = Static_Methods.GetFileFullPath(filePath, fst.SubFile.value);
+            ServoFile = Static_Methods.GetFileFullPath(filePath, fst.ServoFile.value);
         }
 
     }
@@ -158,123 +97,33 @@ namespace ConvertFast
             hdFile = "";
         }
 
-        public void ParseHDInputFile(string fileName_HD, string status)
+        public void ParseHDInputFile(string fileName_HD, string status, FstInput fst)
         {
             hdFile = fileName_HD;
-            var lines = File.ReadAllLines(hdFile);
-            bool isJoint = false;
-            int jointLineNo = 0;
-            bool isMember = false;
-            int memberLineNo = 0;
-            bool isSection = false;
-            int sectionLineNo = 0;
+            string filePath = Path.GetDirectoryName(hdFile);
+            HDInput HD = new HDInput();
+            HD.ParseHDInput(hdFile, status, fst);
 
-            for (int i = 0; i < lines.Length; i++)
+            NJoints = HD.NJoints.value.Count;
+            foreach (var item in HD.NJoints.value)
             {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if (oneInput.Length >= 2 && oneInput[1] == "NJoints")
-                {
-                    NJoints = Int32.Parse(oneInput[0]);
-                    isJoint = true;
-                    continue;
-                }
-
-                if (isJoint)
-                {
-                    if (jointLineNo < 2)
-                    {
-                        jointLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int jointID = Int32.Parse(oneInput[0]);
-                        float jointX = float.Parse(oneInput[1]);
-                        float jointY = float.Parse(oneInput[2]);
-                        float jointZ = float.Parse(oneInput[3]);
-                        Vector3 jointCoord = new Vector3(jointX, jointY, jointZ);
-
-                        jointList.Add(jointID, jointCoord);
-                        jointLineNo++;
-
-                        if (jointLineNo == NJoints + 2)
-                        {
-                            isJoint = false;
-                        }
-                    }
-                }
-
-                if (oneInput.Length >= 2 && oneInput[1] == "NMembers")
-                {
-                    NMembers = Int32.Parse(oneInput[0]);
-                    isMember = true;
-                    continue;
-                }
-
-                if (isMember)
-                {
-                    if (memberLineNo < 2)
-                    {
-                        memberLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int memberID = Int32.Parse(oneInput[0]);
-                        int jointID1 = Int32.Parse(oneInput[1]);
-                        int jointID2 = Int32.Parse(oneInput[2]);
-                        int sectID1 = Int32.Parse(oneInput[3]);
-                        int sectID2 = Int32.Parse(oneInput[4]);
-
-                        var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
-
-                        memberList.Add(memberID, memberProp);
-                        memberLineNo++;
-
-                        status = memberID.ToString() + " " + jointID1.ToString() + " " + sectID1.ToString();
-
-                        if (memberLineNo == NMembers + 2)
-                        {
-                            isMember = false;
-                        }
-                    }
-                }
-
-
-                if (oneInput.Length >= 2 && oneInput[1] == "NPropSets")
-                {
-                    NPropSets = Int32.Parse(oneInput[0]);
-                    isSection = true;
-                    continue;
-                }
-
-                if (isSection)
-                {
-                    if (sectionLineNo < 2)
-                    {
-                        sectionLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int sectionID = Int32.Parse(oneInput[0]);
-                        double diameter = double.Parse(oneInput[1]);
-                        double thickness = double.Parse(oneInput[2]);
-
-                        var sectionProp = new List<double> { diameter, thickness };
-
-                        sectionList.Add(sectionID, sectionProp);
-                        sectionLineNo++;
-
-                        status = sectionID.ToString() + " " + diameter.ToString() + " " + thickness.ToString();
-
-                        if (sectionLineNo == NPropSets + 2)
-                        {
-                            isSection = false;
-                        }
-                    }
-                }
+                Vector3 jointCoord = new Vector3((float)item.Value[0], (float)item.Value[1], (float)item.Value[2]);
+                jointList.Add(item.Key, jointCoord);
             }
+
+            NMembers = HD.NMembers.value.Count;
+            foreach (var item in HD.NMembers.value)
+            {
+                int jointID1 = (int)item.Value[0];
+                int jointID2 = (int)item.Value[1];
+                int sectID1 = (int)item.Value[2];
+                int sectID2 = (int)item.Value[3];
+                var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
+                memberList.Add(item.Key, memberProp);
+            }
+
+            NPropSets = HD.NPropSets.value.Count;
+            sectionList = HD.NPropSets.value;
         }
     }
 
@@ -451,100 +300,44 @@ namespace ConvertFast
             mdFile = "";
         }
 
-        public void ParseMDInputFile(string fileName_MD, string status)
+        public void ParseMDInputFile(string fileName_MD, string status, FstInput fst)
         {
             mdFile = fileName_MD;
-            var lines = File.ReadAllLines(mdFile);
-            bool isConnect = false;
-            int connectLineNo = 0;
-            bool isLine = false;
-            int lineLineNo = 0;
+            MDInput MD = new MDInput();
+            MD.ParseMDInput(mdFile, status, fst);
 
-            for (int i = 0; i < lines.Length; i++)
+            NConnects = MD.NConnects.value;
+            foreach (var item in MD.NConnects_Type)
             {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                int connectID = item.Key;
+                ConnectType connectType = GetConnectType(item.Value);
+                var valueList = MD.NConnects_values[connectID];
+                float connectX = (float)valueList[0];
+                float connectY = (float)valueList[1];
+                float connectZ = (float)valueList[2];
+                Vector3 connectCoord = new Vector3(connectX, connectY, connectZ);
 
-                if (oneInput.Length >= 2 && oneInput[1] == "NConnects")
+                connectList.Add(connectID, connectCoord);
+                if (connectType == ConnectType.Fixed)
                 {
-                    NConnects = Int32.Parse(oneInput[0]);
-                    isConnect = true;
-                    continue;
+                    connectFixedList.Add(connectID, connectCoord);
                 }
-
-                if (isConnect)
+                if (connectType == ConnectType.Vessel)
                 {
-                    if (connectLineNo < 2)
-                    {
-                        connectLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int connectID = Int32.Parse(oneInput[0]);
-                        ConnectType connectType = GetConnectType(oneInput[1]);
-                        float connectX = float.Parse(oneInput[2]);
-                        float connectY = float.Parse(oneInput[3]);
-                        float connectZ = float.Parse(oneInput[4]);
-                        Vector3 connectCoord = new Vector3(connectX, connectY, connectZ);
-
-                        connectList.Add(connectID, connectCoord);
-                        if (connectType == ConnectType.Fixed)
-                        {
-                            connectFixedList.Add(connectID, connectCoord);
-                        }
-                        if (connectType == ConnectType.Vessel)
-                        {
-                            connectVesselList.Add(connectID, connectCoord);
-                        }
-                        connectLineNo++;
-
-                        status = connectID.ToString() + " " + connectX.ToString() + " " + connectY.ToString() + " " + connectZ.ToString();
-
-                        if (connectLineNo == NConnects + 2)
-                        {
-                            isConnect = false;
-                        }
-                    }
+                    connectVesselList.Add(connectID, connectCoord);
                 }
-
-                if (oneInput.Length >= 2 && oneInput[1] == "NLines")
-                {
-                    NLines = Int32.Parse(oneInput[0]);
-                    isLine = true;
-                    continue;
-                }
-
-                if (isLine)
-                {
-                    if (lineLineNo < 2)
-                    {
-                        lineLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int lineID = Int32.Parse(oneInput[0]);
-                        int lineNodeAnch = Int32.Parse(oneInput[4]);
-                        int lineNodeFair = Int32.Parse(oneInput[5]);
-
-                        var lineNodes = new List<int> { lineNodeAnch, lineNodeFair };
-                        lineNodeList.Add(lineID, lineNodes);
-
-                        lineLineNo++;
-
-                        status = lineID.ToString() + " " + lineNodeAnch.ToString() + " " + lineNodeFair.ToString();
-
-                        if (lineLineNo == NLines + 2)
-                        {
-                            isLine = false;
-                        }
-                    }
-                }
-
-
-
             }
 
+            NLines = MD.NLines.value;
+            foreach (var item in MD.NLines_values)
+            {
+                int lineID = item.Key;
+                int lineNodeAnch = (int)item.Value[2];
+                int lineNodeFair = (int)item.Value[3];
+
+                var lineNodes = new List<int> { lineNodeAnch, lineNodeFair };
+                lineNodeList.Add(lineID, lineNodes);
+            }
         }
 
 
@@ -595,138 +388,32 @@ namespace ConvertFast
             adBldProp3 = new Dictionary<int, List<double>> { };
         }
 
-        public void ParseADInputFile(string fileName_AD, string status)
+        public void ParseADInputFile(string fileName_AD, string status, FstInput fst)
         {
             adFile = fileName_AD;
             string filePath = Path.GetDirectoryName(adFile);
-            var lines = File.ReadAllLines(adFile);
-            bool isTwrNd = false;
-            int twrNdLineNo = 0;
-            int twrNdID = 0;
+            ADInput AD = new ADInput();
+            AD.ParseADInput(adFile, status, fst);
 
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if (oneInput.Length >= 2 && oneInput[1] == "NumTwrNds")
-                {
-                    NumTwrNds = Int32.Parse(oneInput[0]);
-                    isTwrNd = true;
-                    continue;
-                }
+            NumTwrNds = AD.NumTwrNds.value.Count;
+            twrNodeList = AD.NumTwrNds.value;
+            ADBlFile1 = Static_Methods.GetFileFullPath(filePath, AD.ADBlFile1.value);
+            ADBlFile2 = Static_Methods.GetFileFullPath(filePath, AD.ADBlFile2.value);
+            ADBlFile3 = Static_Methods.GetFileFullPath(filePath, AD.ADBlFile3.value);
 
-                if (isTwrNd)
-                {
-                    if (twrNdLineNo < 2)
-                    {
-                        twrNdLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        double TwrElev = 0.0;
-                        double TwrDiam = 0.0;
-                        var twrNdProp = new List<double> { TwrElev, TwrDiam };
-                        if (twrNdID == 0)
-                        {
-                            double TwrElev0 = 0.0;
-                            double TwrDiam0 = double.Parse(oneInput[1]);
-                            var twrNdProp0 = new List<double> { TwrElev0, TwrDiam0 };
-                            twrNodeList.Add(twrNdID, twrNdProp0);
-                            twrNdID++;
-                        }
-
-                        TwrElev = double.Parse(oneInput[0]);
-                        TwrDiam = double.Parse(oneInput[1]);
-                        twrNdProp[0] = TwrElev;
-                        twrNdProp[1] = TwrDiam;
-                        twrNodeList.Add(twrNdID, twrNdProp);
-                        twrNdID++;
-                        twrNdLineNo++;
-
-                        if (twrNdLineNo == NumTwrNds + 2)
-                        {
-                            isTwrNd = false;
-                        }
-                    }
-                }
-
-
-                if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(1)")
-                {
-                    ADBlFile1 = oneInput[0];
-                    ADBlFile1 = ADBlFile1.Replace("\"", "");
-                    ADBlFile1 = Path.GetFullPath(Path.Combine(filePath, ADBlFile1));
-                    adBldProp1 = ParseADBladeFile(ADBlFile1);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(2)")
-                {
-                    ADBlFile2 = oneInput[0];
-                    ADBlFile2 = ADBlFile2.Replace("\"", "");
-                    ADBlFile2 = Path.GetFullPath(Path.Combine(filePath, ADBlFile2));
-                    adBldProp2 = ParseADBladeFile(ADBlFile2);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "ADBlFile(3)")
-                {
-                    ADBlFile3 = oneInput[0];
-                    ADBlFile3 = ADBlFile3.Replace("\"", "");
-                    ADBlFile3 = Path.GetFullPath(Path.Combine(filePath, ADBlFile3));
-                    adBldProp3 = ParseADBladeFile(ADBlFile3);
-                }
-
-            }
-
-
+            adBldProp1 = ParseADBladeFile(ADBlFile1, AD);
+            adBldProp2 = ParseADBladeFile(ADBlFile2, AD);
+            adBldProp3 = ParseADBladeFile(ADBlFile3, AD);
         }
 
-        private static IDictionary<int, List<double>> ParseADBladeFile(string BldFile)
+        private static IDictionary<int, List<double>> ParseADBladeFile(string BldFile, ADInput AD)
         {
             IDictionary<int, List<double>> bldProp = new Dictionary<int, List<double>> { };
-            var lines = File.ReadAllLines(BldFile);
-            int NumBlNds = 0;
-            bool isBlNd = false;
-            int BlNdLineNo = 0;
-            int ID = 0;
+            ADBlFileInput ADBlFile = new ADBlFileInput();
+            var status = "";
+            ADBlFile.ParseADBlFileInput(BldFile, status, AD);
 
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if (oneInput.Length >= 2 && oneInput[1] == "NumBlNds")
-                {
-                    NumBlNds = Int32.Parse(oneInput[0]);
-                    isBlNd = true;
-                    continue;
-                }
-
-                if (isBlNd)
-                {
-                    if (BlNdLineNo < 2)
-                    {
-                        BlNdLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        double BlSpn = double.Parse(oneInput[0]);
-                        double BlCrvAC = double.Parse(oneInput[1]);
-                        double BlSwpAC = double.Parse(oneInput[2]);
-                        double BlCrvAng = double.Parse(oneInput[3]);
-                        double BlTwist = double.Parse(oneInput[4]);
-                        double BlChord = double.Parse(oneInput[5]);
-
-                        var oneProp = new List<double> { BlSpn, BlCrvAC, BlSwpAC, BlCrvAng, BlTwist, BlChord };
-
-                        bldProp.Add(ID, oneProp);
-                        BlNdLineNo++;
-                        ID++;
-
-                        if (BlNdLineNo == NumBlNds + 2)
-                        {
-                            isBlNd = false;
-                        }
-                    }
-                }
-            }
-
+            bldProp = ADBlFile.NumBlNds.value;
             return bldProp;
         }
 
@@ -755,61 +442,49 @@ namespace ConvertFast
             NacCMzn = 0.0;
         }
 
-        public void ParseEDInputFile(string fileName_ED, string status)
+        public void ParseEDInputFile(string fileName_ED, string status, FstInput fst)
         {
             edFile = fileName_ED;
             string filePath = Path.GetDirectoryName(edFile);
-            var lines = File.ReadAllLines(edFile);
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if (oneInput.Length >= 2 && oneInput[1] == "NumBl")
-                {
-                    NumBl = Int32.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "HubRad")
-                {
-                    HubRad = double.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMxn")
-                {
-                    NacCMxn = double.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMyn")
-                {
-                    NacCMyn = double.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "NacCMzn")
-                {
-                    NacCMzn = double.Parse(oneInput[0]);
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(1)")
-                {
-                    BldFile1 = oneInput[0];
-                    BldFile1 = BldFile1.Replace("\"", "");
-                    BldFile1 = Path.GetFullPath(Path.Combine(filePath, BldFile1));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(2)")
-                {
-                    BldFile2 = oneInput[0];
-                    BldFile2 = BldFile2.Replace("\"", "");
-                    BldFile2 = Path.GetFullPath(Path.Combine(filePath, BldFile2));
-                }
-                else if (oneInput.Length >= 2 && oneInput[1] == "BldFile(3)")
-                {
-                    BldFile3 = oneInput[0];
-                    BldFile3 = BldFile3.Replace("\"", "");
-                    BldFile3 = Path.GetFullPath(Path.Combine(filePath, BldFile3));
-                }
-                else
-                {
-                    //add more
-                }
-
-            }
+            EDInput ED = new EDInput();
+            ED.ParseEDInput(edFile, status, fst);
+                
+            NumBl = ED.NumBl.value;
+            HubRad = ED.HubRad.value;
+            NacCMxn = ED.NacCMxn.value;
+            NacCMyn = ED.NacCMyn.value;
+            NacCMzn = ED.NacCMzn.value;
+            BldFile1 = Static_Methods.GetFileFullPath(filePath, ED.BldFile1.value);
+            BldFile2 = Static_Methods.GetFileFullPath(filePath, ED.BldFile2.value);
+            BldFile3 = Static_Methods.GetFileFullPath(filePath, ED.BldFile3.value);
         }
+    }
 
+
+
+    public static class FastModuleNum
+    {
+        public const int Module_Unknown = -1;      // Unknown[-]
+        public const int Module_None = 0;      //No module selected[-]
+        public const int Module_Glue = 1;      //Glue code[-]
+        public const int Module_IfW = 2;      //InflowWind[-]
+        public const int Module_OpFM = 3;      //OpenFOAM[-]
+        public const int Module_ED = 4;      //ElastoDyn[-]
+        public const int Module_BD = 5;      //BeamDyn[-]
+        public const int Module_AD14 = 6;      //AeroDyn14[-]
+        public const int Module_AD = 7;      //AeroDyn[-]
+        public const int Module_SrvD = 8;      //ServoDyn[-]
+        public const int Module_HD = 9;      //HydroDyn[-]
+        public const int Module_SD = 10;      //SubDyn[-]
+        public const int Module_ExtPtfm = 11;      //External Platform Loading MCKF[-]
+        public const int Module_MAP = 12;      //MAP(Mooring Analysis Program) [-]
+        public const int Module_FEAM = 13;      //FEAMooring[-]
+        public const int Module_MD = 14;      //MoorDyn[-]
+        public const int Module_Orca = 15;      //OrcaFlex integration(HD/Mooring) [-]
+        public const int Module_IceF = 16;      //IceFloe[-]
+        public const int Module_IceD = 17;      //IceDyn[-]
+        public const int NumModules = 17;      //The number of modules available in FAST[-]
+        public const int MaxNBlades = 3;   
     }
 
 

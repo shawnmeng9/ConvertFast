@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\x64\Debug\Bentley.Structural.Ism.Api.8.1.dll</HintPath>
     </Reference>
+    <Reference Include="FASTInterop">
+      <HintPath>..\FAST\FASTInterop\FASTInterop\FASTInterop\bin\x64\Debug\FASTInterop.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -106,6 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FAST\FASTInterop\FASTInterop\FASTInputDll\FASTInputDll.csproj">
+      <Project>{31df4a85-807d-4357-af12-d69ef7e62b2e}</Project>
+      <Name>FASTInputDll</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
