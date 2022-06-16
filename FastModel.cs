@@ -148,127 +148,48 @@ namespace ConvertFast
             sdFile = "";
         }
 
-        public void ParseSDInputFile(string fileName_SD, string status)
+        public void ParseSDInputFile(string fileName_SD, string status, FstInput fst)
         {
             sdFile = fileName_SD;
-            var lines = File.ReadAllLines(sdFile);
-            bool isJoint = false;
-            int jointLineNo = 0;
-            bool isMember = false;
-            int memberLineNo = 0;
-            bool isPropSet = false;
-            int propSetLineNo = 0;
+            SDInput SD = new SDInput();
+            SD.ParseSDInput(sdFile, status, fst);
 
-            for (int i = 0; i < lines.Length; i++)
+            NJoints = SD.NJoints.value.Count;
+            foreach (var item in SD.NJoints.value)
             {
-                string[] oneInput = lines[i].Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if (oneInput.Length >= 2 && oneInput[1] == "NJoints")
-                {
-                    NJoints = Int32.Parse(oneInput[0]);
-                    isJoint = true;
-                    continue;
-                }
+                int jointID = item.Key;
+                float jointX = (float)item.Value[0];
+                float jointY = (float)item.Value[1];
+                float jointZ = (float)item.Value[2];
+                Vector3 jointCoord = new Vector3(jointX, jointY, jointZ);
 
-                if (isJoint)
-                {
-                    if (jointLineNo < 2)
-                    {
-                        jointLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int jointID = Int32.Parse(oneInput[0]);
-                        float jointX = float.Parse(oneInput[1]);
-                        float jointY = float.Parse(oneInput[2]);
-                        float jointZ = float.Parse(oneInput[3]);
-                        Vector3 jointCoord = new Vector3(jointX, jointY, jointZ);
-
-                        jointList.Add(jointID, jointCoord);
-                        jointLineNo++;
-
-                        status = jointID.ToString() + " " + jointX.ToString() + " " + jointY.ToString() + " " + jointZ.ToString();
-
-                        if (jointLineNo == NJoints + 2)
-                        {
-                            isJoint = false;
-                        }
-                    }
-                }
-
-                if (oneInput.Length >= 2 && oneInput[1] == "NMembers")
-                {
-                    NMembers = Int32.Parse(oneInput[0]);
-                    isMember = true;
-                    continue;
-                }
-
-                if (isMember)
-                {
-                    if (memberLineNo < 2)
-                    {
-                        memberLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int memberID = Int32.Parse(oneInput[0]);
-                        int jointID1 = Int32.Parse(oneInput[1]);
-                        int jointID2 = Int32.Parse(oneInput[2]);
-                        int sectID1 = Int32.Parse(oneInput[3]);
-                        int sectID2 = Int32.Parse(oneInput[4]);
-
-                        var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
-
-                        memberList.Add(memberID, memberProp);
-                        memberLineNo++;
-
-                        status = memberID.ToString() + " " + jointID1.ToString() + " " + sectID1.ToString();
-
-                        if (memberLineNo == NMembers + 2)
-                        {
-                            isMember = false;
-                        }
-                    }
-                }
-
-
-                if (oneInput.Length >= 2 && oneInput[1] == "NPropSets")
-                {
-                    NPropSets = Int32.Parse(oneInput[0]);
-                    isPropSet = true;
-                    continue;
-                }
-
-                if (isPropSet)
-                {
-                    if (propSetLineNo < 2)
-                    {
-                        propSetLineNo++;
-                        continue;
-                    }
-                    else
-                    {
-                        int sectionID = Int32.Parse(oneInput[0]);
-                        double diameter = double.Parse(oneInput[4]);
-                        double thickness = double.Parse(oneInput[5]);
-
-                        var sectionProp = new List<double> { diameter, thickness };
-
-                        sectionList.Add(sectionID, sectionProp);
-                        propSetLineNo++;
-
-                        status = sectionID.ToString() + " " + diameter.ToString() + " " + thickness.ToString();
-
-                        if (propSetLineNo == NPropSets + 2)
-                        {
-                            isPropSet = false;
-                        }
-                    }
-                }
-
+                jointList.Add(jointID, jointCoord);
             }
 
+            NMembers = SD.NMembers.value.Count;
+            foreach (var item in SD.NMembers.value)
+            {
+                int memberID = item.Key;
+                int jointID1 = item.Value[0];
+                int jointID2 = item.Value[1];
+                int sectID1 = item.Value[2];
+                int sectID2 = item.Value[2];
+
+                var memberProp = new List<int> { jointID1, jointID2, sectID1, sectID2 };
+
+                memberList.Add(memberID, memberProp);
+            }
+
+            NPropSets = SD.NPropSets.value.Count;
+            foreach (var item in SD.NPropSets.value)
+            {
+                int sectionID = item.Key;
+                double diameter = item.Value[3];
+                double thickness = item.Value[4];
+                var sectionProp = new List<double> { diameter, thickness };
+
+                sectionList.Add(sectionID, sectionProp);
+            }
         }
     }
 

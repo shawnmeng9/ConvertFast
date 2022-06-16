@@ -151,7 +151,7 @@ namespace ConvertFast
             if (fstModel.convertSub)
             {
                 fstModel.sdModel = new SDModel();
-                fstModel.sdModel.ParseSDInputFile(fstModel.SubFile, status);
+                fstModel.sdModel.ParseSDInputFile(fstModel.SubFile, status, fstInput);
             }
             if (fstModel.convertMooring)
             {
