@@ -111,10 +111,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FAST\FASTInterop\FASTInterop\FASTInputDll\FASTInputDll.csproj">
+    <ProjectReference Include="..\FASTInterop\FASTInputDll\FASTInputDll.csproj">
       <Project>{31df4a85-807d-4357-af12-d69ef7e62b2e}</Project>
       <Name>FASTInputDll</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
