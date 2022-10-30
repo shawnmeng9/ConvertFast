@@ -22,3 +22,7 @@ This program should directly be used by opening ConvertFast.exe in the zipped fi
 https://user-images.githubusercontent.com/61556400/195130866-37db0c82-d9b6-4369-8d49-67a4a96a2906.mp4
 
 I know that there is a lot of work to do with this program. If you have any suggestions, or comments or find any bugs, please feel free to contact me (shawnmeng9@gmail.com). I sincerely appreciate it.
+
+The following OpenFAST testing models have been tested and summarized in the following table:
+
+![image](https://user-images.githubusercontent.com/61556400/198859390-2830a285-00c3-4677-b7de-345bf5725f5f.png)
