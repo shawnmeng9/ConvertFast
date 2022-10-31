@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,8 @@ namespace ConvertFast
         {
             InitializeComponent();
             cbOutputFile.SelectedIndex = 1;
+
+            tabControl1.TabPages.Remove(tabFst);
         }
 
         private void bSelectFile_Click(object sender, EventArgs e)
@@ -127,6 +130,12 @@ namespace ConvertFast
                 if (dgvFastInputFiles.RowCount > 0 && dgvFastInputFiles.ColumnCount > 0)
                 {
                     dgvFastInputFiles.CurrentCell = dgvFastInputFiles.Rows[0].Cells[1];
+                }
+
+
+                if (fstModel.fstFile != "")
+                {
+                    tabControl1.TabPages.Add(tabFst);
                 }
             }
         }
@@ -432,5 +441,21 @@ namespace ConvertFast
             }
         }
 
+        private void menuRun_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "openfast_x64.exe";
+            startInfo.Arguments = fstModel.fstFile;
+            Process.Start(startInfo);
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabFst)
+            {
+                cbFstInput.SelectedIndex = 0;
+                getFstSimulationControl();
+            }
+        }
     }
 }
