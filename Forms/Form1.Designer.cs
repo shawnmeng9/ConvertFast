@@ -38,6 +38,25 @@ namespace ConvertFast
             this.lbOutputFile = new System.Windows.Forms.Label();
             this.tabFst = new System.Windows.Forms.TabPage();
             this.cbFstInput = new System.Windows.Forms.ComboBox();
+            this.gbFstFeature = new System.Windows.Forms.GroupBox();
+            this.cbFstMHK = new System.Windows.Forms.ComboBox();
+            this.lblFstMHK = new System.Windows.Forms.Label();
+            this.cbFstCompIce = new System.Windows.Forms.ComboBox();
+            this.lblFstCompIce = new System.Windows.Forms.Label();
+            this.cbFstCompMooring = new System.Windows.Forms.ComboBox();
+            this.lblFstCompMooring = new System.Windows.Forms.Label();
+            this.cbFstCompSub = new System.Windows.Forms.ComboBox();
+            this.lblFstCompSub = new System.Windows.Forms.Label();
+            this.cbFstCompHydro = new System.Windows.Forms.ComboBox();
+            this.lblFstCompHydro = new System.Windows.Forms.Label();
+            this.cbFstCompServo = new System.Windows.Forms.ComboBox();
+            this.lblFstCompServo = new System.Windows.Forms.Label();
+            this.cbFstCompAero = new System.Windows.Forms.ComboBox();
+            this.lblFstCompAero = new System.Windows.Forms.Label();
+            this.cbFstCompInflow = new System.Windows.Forms.ComboBox();
+            this.lblFstCompInflow = new System.Windows.Forms.Label();
+            this.cbFstCompElast = new System.Windows.Forms.ComboBox();
+            this.lblFstCompElast = new System.Windows.Forms.Label();
             this.gbFstSimCon = new System.Windows.Forms.GroupBox();
             this.chkFstEcho = new System.Windows.Forms.CheckBox();
             this.txtFstUJacSclFact = new System.Windows.Forms.TextBox();
@@ -64,33 +83,18 @@ namespace ConvertFast
             this.visualizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRun = new System.Windows.Forms.ToolStripMenuItem();
+            this.paraviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectOpenFASTSolverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectParaViewAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.gbFstFeature = new System.Windows.Forms.GroupBox();
-            this.lblFstCompElast = new System.Windows.Forms.Label();
-            this.cbFstCompElast = new System.Windows.Forms.ComboBox();
-            this.lblFstCompInflow = new System.Windows.Forms.Label();
-            this.cbFstCompInflow = new System.Windows.Forms.ComboBox();
-            this.lblFstCompAero = new System.Windows.Forms.Label();
-            this.cbFstCompAero = new System.Windows.Forms.ComboBox();
-            this.lblFstCompServo = new System.Windows.Forms.Label();
-            this.cbFstCompServo = new System.Windows.Forms.ComboBox();
-            this.lblFstCompHydro = new System.Windows.Forms.Label();
-            this.cbFstCompHydro = new System.Windows.Forms.ComboBox();
-            this.lblFstCompSub = new System.Windows.Forms.Label();
-            this.cbFstCompSub = new System.Windows.Forms.ComboBox();
-            this.lblFstCompMooring = new System.Windows.Forms.Label();
-            this.cbFstCompMooring = new System.Windows.Forms.ComboBox();
-            this.lblFstCompIce = new System.Windows.Forms.Label();
-            this.cbFstCompIce = new System.Windows.Forms.ComboBox();
-            this.lblFstMHK = new System.Windows.Forms.Label();
-            this.cbFstMHK = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabVisualization.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFastInputFiles)).BeginInit();
             this.tabFst.SuspendLayout();
+            this.gbFstFeature.SuspendLayout();
             this.gbFstSimCon.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.gbFstFeature.SuspendLayout();
             this.SuspendLayout();
             // 
             // bOk
@@ -197,6 +201,239 @@ namespace ConvertFast
             this.cbFstInput.Size = new System.Drawing.Size(230, 21);
             this.cbFstInput.TabIndex = 1;
             this.cbFstInput.SelectedIndexChanged += new System.EventHandler(this.cbFstInput_SelectedIndexChanged);
+            // 
+            // gbFstFeature
+            // 
+            this.gbFstFeature.Controls.Add(this.cbFstMHK);
+            this.gbFstFeature.Controls.Add(this.lblFstMHK);
+            this.gbFstFeature.Controls.Add(this.cbFstCompIce);
+            this.gbFstFeature.Controls.Add(this.lblFstCompIce);
+            this.gbFstFeature.Controls.Add(this.cbFstCompMooring);
+            this.gbFstFeature.Controls.Add(this.lblFstCompMooring);
+            this.gbFstFeature.Controls.Add(this.cbFstCompSub);
+            this.gbFstFeature.Controls.Add(this.lblFstCompSub);
+            this.gbFstFeature.Controls.Add(this.cbFstCompHydro);
+            this.gbFstFeature.Controls.Add(this.lblFstCompHydro);
+            this.gbFstFeature.Controls.Add(this.cbFstCompServo);
+            this.gbFstFeature.Controls.Add(this.lblFstCompServo);
+            this.gbFstFeature.Controls.Add(this.cbFstCompAero);
+            this.gbFstFeature.Controls.Add(this.lblFstCompAero);
+            this.gbFstFeature.Controls.Add(this.cbFstCompInflow);
+            this.gbFstFeature.Controls.Add(this.lblFstCompInflow);
+            this.gbFstFeature.Controls.Add(this.cbFstCompElast);
+            this.gbFstFeature.Controls.Add(this.lblFstCompElast);
+            this.gbFstFeature.Location = new System.Drawing.Point(6, 50);
+            this.gbFstFeature.Name = "gbFstFeature";
+            this.gbFstFeature.Size = new System.Drawing.Size(684, 448);
+            this.gbFstFeature.TabIndex = 3;
+            this.gbFstFeature.TabStop = false;
+            this.gbFstFeature.Text = "FEATURE SWITCHES AND FLAGS";
+            // 
+            // cbFstMHK
+            // 
+            this.cbFstMHK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstMHK.FormattingEnabled = true;
+            this.cbFstMHK.Items.AddRange(new object[] {
+            "0 - Not an MHK turbine",
+            "1 - Fixed MHK turbine",
+            "2 - Floating MHK turbine"});
+            this.cbFstMHK.Location = new System.Drawing.Point(94, 312);
+            this.cbFstMHK.Name = "cbFstMHK";
+            this.cbFstMHK.Size = new System.Drawing.Size(212, 21);
+            this.cbFstMHK.TabIndex = 2;
+            // 
+            // lblFstMHK
+            // 
+            this.lblFstMHK.AutoSize = true;
+            this.lblFstMHK.Location = new System.Drawing.Point(19, 315);
+            this.lblFstMHK.Name = "lblFstMHK";
+            this.lblFstMHK.Size = new System.Drawing.Size(31, 13);
+            this.lblFstMHK.TabIndex = 1;
+            this.lblFstMHK.Text = "MHK";
+            this.toolTip1.SetToolTip(this.lblFstMHK, "MHK turbine type (switch)");
+            // 
+            // cbFstCompIce
+            // 
+            this.cbFstCompIce.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompIce.FormattingEnabled = true;
+            this.cbFstCompIce.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - IceFloe",
+            "2 - IceDyn"});
+            this.cbFstCompIce.Location = new System.Drawing.Point(94, 276);
+            this.cbFstCompIce.Name = "cbFstCompIce";
+            this.cbFstCompIce.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompIce.TabIndex = 2;
+            // 
+            // lblFstCompIce
+            // 
+            this.lblFstCompIce.AutoSize = true;
+            this.lblFstCompIce.Location = new System.Drawing.Point(19, 279);
+            this.lblFstCompIce.Name = "lblFstCompIce";
+            this.lblFstCompIce.Size = new System.Drawing.Size(49, 13);
+            this.lblFstCompIce.TabIndex = 1;
+            this.lblFstCompIce.Text = "CompIce";
+            this.toolTip1.SetToolTip(this.lblFstCompIce, "Compute ice loads (switch)");
+            // 
+            // cbFstCompMooring
+            // 
+            this.cbFstCompMooring.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompMooring.FormattingEnabled = true;
+            this.cbFstCompMooring.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - MAP++",
+            "2 - FEAMooring",
+            "3 - MoorDyn",
+            "4 - OrcaFlex"});
+            this.cbFstCompMooring.Location = new System.Drawing.Point(94, 241);
+            this.cbFstCompMooring.Name = "cbFstCompMooring";
+            this.cbFstCompMooring.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompMooring.TabIndex = 2;
+            // 
+            // lblFstCompMooring
+            // 
+            this.lblFstCompMooring.AutoSize = true;
+            this.lblFstCompMooring.Location = new System.Drawing.Point(19, 244);
+            this.lblFstCompMooring.Name = "lblFstCompMooring";
+            this.lblFstCompMooring.Size = new System.Drawing.Size(72, 13);
+            this.lblFstCompMooring.TabIndex = 1;
+            this.lblFstCompMooring.Text = "CompMooring";
+            this.toolTip1.SetToolTip(this.lblFstCompMooring, "Compute mooring system (switch)");
+            // 
+            // cbFstCompSub
+            // 
+            this.cbFstCompSub.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompSub.FormattingEnabled = true;
+            this.cbFstCompSub.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - SubDyn",
+            "2 - External Platform MCKF"});
+            this.cbFstCompSub.Location = new System.Drawing.Point(94, 206);
+            this.cbFstCompSub.Name = "cbFstCompSub";
+            this.cbFstCompSub.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompSub.TabIndex = 2;
+            // 
+            // lblFstCompSub
+            // 
+            this.lblFstCompSub.AutoSize = true;
+            this.lblFstCompSub.Location = new System.Drawing.Point(19, 209);
+            this.lblFstCompSub.Name = "lblFstCompSub";
+            this.lblFstCompSub.Size = new System.Drawing.Size(53, 13);
+            this.lblFstCompSub.TabIndex = 1;
+            this.lblFstCompSub.Text = "CompSub";
+            this.toolTip1.SetToolTip(this.lblFstCompSub, "Compute sub-structural dynamics (switch)");
+            // 
+            // cbFstCompHydro
+            // 
+            this.cbFstCompHydro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompHydro.FormattingEnabled = true;
+            this.cbFstCompHydro.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - HydroDyn"});
+            this.cbFstCompHydro.Location = new System.Drawing.Point(94, 173);
+            this.cbFstCompHydro.Name = "cbFstCompHydro";
+            this.cbFstCompHydro.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompHydro.TabIndex = 2;
+            // 
+            // lblFstCompHydro
+            // 
+            this.lblFstCompHydro.AutoSize = true;
+            this.lblFstCompHydro.Location = new System.Drawing.Point(19, 176);
+            this.lblFstCompHydro.Name = "lblFstCompHydro";
+            this.lblFstCompHydro.Size = new System.Drawing.Size(62, 13);
+            this.lblFstCompHydro.TabIndex = 1;
+            this.lblFstCompHydro.Text = "CompHydro";
+            this.toolTip1.SetToolTip(this.lblFstCompHydro, "Compute hydrodynamic loads (switch)");
+            // 
+            // cbFstCompServo
+            // 
+            this.cbFstCompServo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompServo.FormattingEnabled = true;
+            this.cbFstCompServo.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - ServoDyn"});
+            this.cbFstCompServo.Location = new System.Drawing.Point(94, 136);
+            this.cbFstCompServo.Name = "cbFstCompServo";
+            this.cbFstCompServo.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompServo.TabIndex = 2;
+            // 
+            // lblFstCompServo
+            // 
+            this.lblFstCompServo.AutoSize = true;
+            this.lblFstCompServo.Location = new System.Drawing.Point(19, 139);
+            this.lblFstCompServo.Name = "lblFstCompServo";
+            this.lblFstCompServo.Size = new System.Drawing.Size(62, 13);
+            this.lblFstCompServo.TabIndex = 1;
+            this.lblFstCompServo.Text = "CompServo";
+            this.toolTip1.SetToolTip(this.lblFstCompServo, "Compute control and electrical-drive dynamics (switch)");
+            // 
+            // cbFstCompAero
+            // 
+            this.cbFstCompAero.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompAero.FormattingEnabled = true;
+            this.cbFstCompAero.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - AeroDyn v14",
+            "2 - AeroDyn v15"});
+            this.cbFstCompAero.Location = new System.Drawing.Point(94, 100);
+            this.cbFstCompAero.Name = "cbFstCompAero";
+            this.cbFstCompAero.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompAero.TabIndex = 2;
+            // 
+            // lblFstCompAero
+            // 
+            this.lblFstCompAero.AutoSize = true;
+            this.lblFstCompAero.Location = new System.Drawing.Point(19, 103);
+            this.lblFstCompAero.Name = "lblFstCompAero";
+            this.lblFstCompAero.Size = new System.Drawing.Size(56, 13);
+            this.lblFstCompAero.TabIndex = 1;
+            this.lblFstCompAero.Text = "CompAero";
+            this.toolTip1.SetToolTip(this.lblFstCompAero, "Compute aerodynamic loads (switch)");
+            // 
+            // cbFstCompInflow
+            // 
+            this.cbFstCompInflow.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompInflow.FormattingEnabled = true;
+            this.cbFstCompInflow.Items.AddRange(new object[] {
+            "0 - still air",
+            "1 - InflowWind",
+            "2 - external from OpenFOAM"});
+            this.cbFstCompInflow.Location = new System.Drawing.Point(94, 65);
+            this.cbFstCompInflow.Name = "cbFstCompInflow";
+            this.cbFstCompInflow.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompInflow.TabIndex = 2;
+            // 
+            // lblFstCompInflow
+            // 
+            this.lblFstCompInflow.AutoSize = true;
+            this.lblFstCompInflow.Location = new System.Drawing.Point(19, 68);
+            this.lblFstCompInflow.Name = "lblFstCompInflow";
+            this.lblFstCompInflow.Size = new System.Drawing.Size(62, 13);
+            this.lblFstCompInflow.TabIndex = 1;
+            this.lblFstCompInflow.Text = "CompInflow";
+            this.toolTip1.SetToolTip(this.lblFstCompInflow, "Compute inflow wind velocities (switch)");
+            // 
+            // cbFstCompElast
+            // 
+            this.cbFstCompElast.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFstCompElast.FormattingEnabled = true;
+            this.cbFstCompElast.Items.AddRange(new object[] {
+            "1 - ElastoDyn",
+            "2 - ElastoDyn + BeamDyn for blades"});
+            this.cbFstCompElast.Location = new System.Drawing.Point(94, 32);
+            this.cbFstCompElast.Name = "cbFstCompElast";
+            this.cbFstCompElast.Size = new System.Drawing.Size(212, 21);
+            this.cbFstCompElast.TabIndex = 2;
+            // 
+            // lblFstCompElast
+            // 
+            this.lblFstCompElast.AutoSize = true;
+            this.lblFstCompElast.Location = new System.Drawing.Point(19, 35);
+            this.lblFstCompElast.Name = "lblFstCompElast";
+            this.lblFstCompElast.Size = new System.Drawing.Size(57, 13);
+            this.lblFstCompElast.TabIndex = 1;
+            this.lblFstCompElast.Text = "CompElast";
+            this.toolTip1.SetToolTip(this.lblFstCompElast, "Compute structural dynamics (switch)");
             // 
             // gbFstSimCon
             // 
@@ -415,7 +652,9 @@ namespace ConvertFast
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.visualizeToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.menuRun});
+            this.menuRun,
+            this.paraviewToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1041, 24);
@@ -427,12 +666,14 @@ namespace ConvertFast
             this.visualizeToolStripMenuItem.Name = "visualizeToolStripMenuItem";
             this.visualizeToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.visualizeToolStripMenuItem.Text = "Visualize";
+            this.visualizeToolStripMenuItem.Click += new System.EventHandler(this.visualizeToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Visible = false;
             // 
             // menuRun
             // 
@@ -441,238 +682,34 @@ namespace ConvertFast
             this.menuRun.Text = "Run";
             this.menuRun.Click += new System.EventHandler(this.menuRun_Click);
             // 
-            // gbFstFeature
+            // paraviewToolStripMenuItem
             // 
-            this.gbFstFeature.Controls.Add(this.cbFstMHK);
-            this.gbFstFeature.Controls.Add(this.lblFstMHK);
-            this.gbFstFeature.Controls.Add(this.cbFstCompIce);
-            this.gbFstFeature.Controls.Add(this.lblFstCompIce);
-            this.gbFstFeature.Controls.Add(this.cbFstCompMooring);
-            this.gbFstFeature.Controls.Add(this.lblFstCompMooring);
-            this.gbFstFeature.Controls.Add(this.cbFstCompSub);
-            this.gbFstFeature.Controls.Add(this.lblFstCompSub);
-            this.gbFstFeature.Controls.Add(this.cbFstCompHydro);
-            this.gbFstFeature.Controls.Add(this.lblFstCompHydro);
-            this.gbFstFeature.Controls.Add(this.cbFstCompServo);
-            this.gbFstFeature.Controls.Add(this.lblFstCompServo);
-            this.gbFstFeature.Controls.Add(this.cbFstCompAero);
-            this.gbFstFeature.Controls.Add(this.lblFstCompAero);
-            this.gbFstFeature.Controls.Add(this.cbFstCompInflow);
-            this.gbFstFeature.Controls.Add(this.lblFstCompInflow);
-            this.gbFstFeature.Controls.Add(this.cbFstCompElast);
-            this.gbFstFeature.Controls.Add(this.lblFstCompElast);
-            this.gbFstFeature.Location = new System.Drawing.Point(6, 50);
-            this.gbFstFeature.Name = "gbFstFeature";
-            this.gbFstFeature.Size = new System.Drawing.Size(684, 448);
-            this.gbFstFeature.TabIndex = 3;
-            this.gbFstFeature.TabStop = false;
-            this.gbFstFeature.Text = "FEATURE SWITCHES AND FLAGS";
+            this.paraviewToolStripMenuItem.Name = "paraviewToolStripMenuItem";
+            this.paraviewToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.paraviewToolStripMenuItem.Text = "ParaView";
+            this.paraviewToolStripMenuItem.Visible = false;
             // 
-            // lblFstCompElast
+            // settingsToolStripMenuItem
             // 
-            this.lblFstCompElast.AutoSize = true;
-            this.lblFstCompElast.Location = new System.Drawing.Point(19, 35);
-            this.lblFstCompElast.Name = "lblFstCompElast";
-            this.lblFstCompElast.Size = new System.Drawing.Size(57, 13);
-            this.lblFstCompElast.TabIndex = 1;
-            this.lblFstCompElast.Text = "CompElast";
-            this.toolTip1.SetToolTip(this.lblFstCompElast, "Compute structural dynamics (switch)");
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectOpenFASTSolverToolStripMenuItem,
+            this.selectParaViewAppToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Visible = false;
             // 
-            // cbFstCompElast
+            // selectOpenFASTSolverToolStripMenuItem
             // 
-            this.cbFstCompElast.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompElast.FormattingEnabled = true;
-            this.cbFstCompElast.Items.AddRange(new object[] {
-            "1 - ElastoDyn",
-            "2 - ElastoDyn + BeamDyn for blades"});
-            this.cbFstCompElast.Location = new System.Drawing.Point(94, 32);
-            this.cbFstCompElast.Name = "cbFstCompElast";
-            this.cbFstCompElast.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompElast.TabIndex = 2;
+            this.selectOpenFASTSolverToolStripMenuItem.Name = "selectOpenFASTSolverToolStripMenuItem";
+            this.selectOpenFASTSolverToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.selectOpenFASTSolverToolStripMenuItem.Text = "Select OpenFAST solver";
             // 
-            // lblFstCompInflow
+            // selectParaViewAppToolStripMenuItem
             // 
-            this.lblFstCompInflow.AutoSize = true;
-            this.lblFstCompInflow.Location = new System.Drawing.Point(19, 68);
-            this.lblFstCompInflow.Name = "lblFstCompInflow";
-            this.lblFstCompInflow.Size = new System.Drawing.Size(62, 13);
-            this.lblFstCompInflow.TabIndex = 1;
-            this.lblFstCompInflow.Text = "CompInflow";
-            this.toolTip1.SetToolTip(this.lblFstCompInflow, "Compute inflow wind velocities (switch)");
-            // 
-            // cbFstCompInflow
-            // 
-            this.cbFstCompInflow.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompInflow.FormattingEnabled = true;
-            this.cbFstCompInflow.Items.AddRange(new object[] {
-            "0 - still air",
-            "1 - InflowWind",
-            "2 - external from OpenFOAM"});
-            this.cbFstCompInflow.Location = new System.Drawing.Point(94, 65);
-            this.cbFstCompInflow.Name = "cbFstCompInflow";
-            this.cbFstCompInflow.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompInflow.TabIndex = 2;
-            // 
-            // lblFstCompAero
-            // 
-            this.lblFstCompAero.AutoSize = true;
-            this.lblFstCompAero.Location = new System.Drawing.Point(19, 103);
-            this.lblFstCompAero.Name = "lblFstCompAero";
-            this.lblFstCompAero.Size = new System.Drawing.Size(56, 13);
-            this.lblFstCompAero.TabIndex = 1;
-            this.lblFstCompAero.Text = "CompAero";
-            this.toolTip1.SetToolTip(this.lblFstCompAero, "Compute aerodynamic loads (switch)");
-            // 
-            // cbFstCompAero
-            // 
-            this.cbFstCompAero.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompAero.FormattingEnabled = true;
-            this.cbFstCompAero.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - AeroDyn v14",
-            "2 - AeroDyn v15"});
-            this.cbFstCompAero.Location = new System.Drawing.Point(94, 100);
-            this.cbFstCompAero.Name = "cbFstCompAero";
-            this.cbFstCompAero.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompAero.TabIndex = 2;
-            // 
-            // lblFstCompServo
-            // 
-            this.lblFstCompServo.AutoSize = true;
-            this.lblFstCompServo.Location = new System.Drawing.Point(19, 139);
-            this.lblFstCompServo.Name = "lblFstCompServo";
-            this.lblFstCompServo.Size = new System.Drawing.Size(62, 13);
-            this.lblFstCompServo.TabIndex = 1;
-            this.lblFstCompServo.Text = "CompServo";
-            this.toolTip1.SetToolTip(this.lblFstCompServo, "Compute control and electrical-drive dynamics (switch)");
-            // 
-            // cbFstCompServo
-            // 
-            this.cbFstCompServo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompServo.FormattingEnabled = true;
-            this.cbFstCompServo.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - ServoDyn"});
-            this.cbFstCompServo.Location = new System.Drawing.Point(94, 136);
-            this.cbFstCompServo.Name = "cbFstCompServo";
-            this.cbFstCompServo.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompServo.TabIndex = 2;
-            // 
-            // lblFstCompHydro
-            // 
-            this.lblFstCompHydro.AutoSize = true;
-            this.lblFstCompHydro.Location = new System.Drawing.Point(19, 176);
-            this.lblFstCompHydro.Name = "lblFstCompHydro";
-            this.lblFstCompHydro.Size = new System.Drawing.Size(62, 13);
-            this.lblFstCompHydro.TabIndex = 1;
-            this.lblFstCompHydro.Text = "CompHydro";
-            this.toolTip1.SetToolTip(this.lblFstCompHydro, "Compute hydrodynamic loads (switch)");
-            // 
-            // cbFstCompHydro
-            // 
-            this.cbFstCompHydro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompHydro.FormattingEnabled = true;
-            this.cbFstCompHydro.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - HydroDyn"});
-            this.cbFstCompHydro.Location = new System.Drawing.Point(94, 173);
-            this.cbFstCompHydro.Name = "cbFstCompHydro";
-            this.cbFstCompHydro.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompHydro.TabIndex = 2;
-            // 
-            // lblFstCompSub
-            // 
-            this.lblFstCompSub.AutoSize = true;
-            this.lblFstCompSub.Location = new System.Drawing.Point(19, 209);
-            this.lblFstCompSub.Name = "lblFstCompSub";
-            this.lblFstCompSub.Size = new System.Drawing.Size(53, 13);
-            this.lblFstCompSub.TabIndex = 1;
-            this.lblFstCompSub.Text = "CompSub";
-            this.toolTip1.SetToolTip(this.lblFstCompSub, "Compute sub-structural dynamics (switch)");
-            // 
-            // cbFstCompSub
-            // 
-            this.cbFstCompSub.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompSub.FormattingEnabled = true;
-            this.cbFstCompSub.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - SubDyn",
-            "2 - External Platform MCKF"});
-            this.cbFstCompSub.Location = new System.Drawing.Point(94, 206);
-            this.cbFstCompSub.Name = "cbFstCompSub";
-            this.cbFstCompSub.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompSub.TabIndex = 2;
-            // 
-            // lblFstCompMooring
-            // 
-            this.lblFstCompMooring.AutoSize = true;
-            this.lblFstCompMooring.Location = new System.Drawing.Point(19, 244);
-            this.lblFstCompMooring.Name = "lblFstCompMooring";
-            this.lblFstCompMooring.Size = new System.Drawing.Size(72, 13);
-            this.lblFstCompMooring.TabIndex = 1;
-            this.lblFstCompMooring.Text = "CompMooring";
-            this.toolTip1.SetToolTip(this.lblFstCompMooring, "Compute mooring system (switch)");
-            // 
-            // cbFstCompMooring
-            // 
-            this.cbFstCompMooring.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompMooring.FormattingEnabled = true;
-            this.cbFstCompMooring.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - MAP++",
-            "2 - FEAMooring",
-            "3 - MoorDyn",
-            "4 - OrcaFlex"});
-            this.cbFstCompMooring.Location = new System.Drawing.Point(94, 241);
-            this.cbFstCompMooring.Name = "cbFstCompMooring";
-            this.cbFstCompMooring.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompMooring.TabIndex = 2;
-            // 
-            // lblFstCompIce
-            // 
-            this.lblFstCompIce.AutoSize = true;
-            this.lblFstCompIce.Location = new System.Drawing.Point(19, 279);
-            this.lblFstCompIce.Name = "lblFstCompIce";
-            this.lblFstCompIce.Size = new System.Drawing.Size(49, 13);
-            this.lblFstCompIce.TabIndex = 1;
-            this.lblFstCompIce.Text = "CompIce";
-            this.toolTip1.SetToolTip(this.lblFstCompIce, "Compute ice loads (switch)");
-            // 
-            // cbFstCompIce
-            // 
-            this.cbFstCompIce.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstCompIce.FormattingEnabled = true;
-            this.cbFstCompIce.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - IceFloe",
-            "2 - IceDyn"});
-            this.cbFstCompIce.Location = new System.Drawing.Point(94, 276);
-            this.cbFstCompIce.Name = "cbFstCompIce";
-            this.cbFstCompIce.Size = new System.Drawing.Size(212, 21);
-            this.cbFstCompIce.TabIndex = 2;
-            // 
-            // lblFstMHK
-            // 
-            this.lblFstMHK.AutoSize = true;
-            this.lblFstMHK.Location = new System.Drawing.Point(19, 315);
-            this.lblFstMHK.Name = "lblFstMHK";
-            this.lblFstMHK.Size = new System.Drawing.Size(31, 13);
-            this.lblFstMHK.TabIndex = 1;
-            this.lblFstMHK.Text = "MHK";
-            this.toolTip1.SetToolTip(this.lblFstMHK, "MHK turbine type (switch)");
-            // 
-            // cbFstMHK
-            // 
-            this.cbFstMHK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFstMHK.FormattingEnabled = true;
-            this.cbFstMHK.Items.AddRange(new object[] {
-            "0 - Not an MHK turbine",
-            "1 - Fixed MHK turbine",
-            "2 - Floating MHK turbine"});
-            this.cbFstMHK.Location = new System.Drawing.Point(94, 312);
-            this.cbFstMHK.Name = "cbFstMHK";
-            this.cbFstMHK.Size = new System.Drawing.Size(212, 21);
-            this.cbFstMHK.TabIndex = 2;
+            this.selectParaViewAppToolStripMenuItem.Name = "selectParaViewAppToolStripMenuItem";
+            this.selectParaViewAppToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.selectParaViewAppToolStripMenuItem.Text = "Select ParaView app";
             // 
             // Form1
             // 
@@ -693,12 +730,12 @@ namespace ConvertFast
             this.tabVisualization.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFastInputFiles)).EndInit();
             this.tabFst.ResumeLayout(false);
+            this.gbFstFeature.ResumeLayout(false);
+            this.gbFstFeature.PerformLayout();
             this.gbFstSimCon.ResumeLayout(false);
             this.gbFstSimCon.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.gbFstFeature.ResumeLayout(false);
-            this.gbFstFeature.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -759,6 +796,10 @@ namespace ConvertFast
         private System.Windows.Forms.Label lblFstCompIce;
         private System.Windows.Forms.ComboBox cbFstMHK;
         private System.Windows.Forms.Label lblFstMHK;
+        private System.Windows.Forms.ToolStripMenuItem paraviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectOpenFASTSolverToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectParaViewAppToolStripMenuItem;
     }
 }
 

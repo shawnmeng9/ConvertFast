@@ -46,7 +46,7 @@ namespace ConvertFast
             InitializeComponent();
             cbOutputFile.SelectedIndex = 1;
 
-            tabControl1.TabPages.Remove(tabFst);
+            tabControl1.TabPages.Remove(tabFst);   //temporarily hide fst tab
         }
 
         private void bSelectFile_Click(object sender, EventArgs e)
@@ -135,54 +135,14 @@ namespace ConvertFast
 
                 if (fstModel.fstFile != "")
                 {
-                    tabControl1.TabPages.Add(tabFst);
+                    //tabControl1.TabPages.Add(tabFst);   //temporarily hide fst tab
                 }
             }
         }
 
         private void bOk_Click(object sender, EventArgs e)
         {
-            if (fstModel.convertElast)
-            {
-                fstModel.edModel = new EDModel();
-                fstModel.edModel.ParseEDInputFile(fstModel.EDFile, status, fstInput);
-            }
-            if (fstModel.convertAero)
-            {
-                fstModel.adModel = new ADModel();
-                fstModel.adModel.ParseADInputFile(fstModel.AeroFile, status, fstInput);
-            }
-            if (fstModel.convertHydro)
-            {
-                fstModel.hdModel = new HDModel();
-                fstModel.hdModel.ParseHDInputFile(fstModel.HydroFile, status, fstInput);
-            }
-            if (fstModel.convertSub)
-            {
-                fstModel.sdModel = new SDModel();
-                fstModel.sdModel.ParseSDInputFile(fstModel.SubFile, status, fstInput);
-            }
-            if (fstModel.convertMooring)
-            {
-                fstModel.mdModel = new MDModel();
-                fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status, fstInput);
-            }
-            if (fstModel.convertServo)
-            {
-                //add code
-            }
-
-
-            if (outFile == OutFile.SacsPy)
-            {
-                ToSacs.ConvertToSacs(fstModel, ref status);
-                txtStatus.Text = status;
-            }
-            else if (outFile == OutFile.Ism)
-            {
-                ToIsm.ConvertToIsm(fstModel, ref status);
-                txtStatus.Text = status;
-            }
+            visualizeFastModel();
         }
 
         private OutFile HandleOutFile()
@@ -455,6 +415,56 @@ namespace ConvertFast
             {
                 cbFstInput.SelectedIndex = 0;
                 getFstSimulationControl();
+            }
+        }
+
+        private void visualizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            visualizeFastModel();
+        }
+
+        private void visualizeFastModel()
+        {
+            if (fstModel.convertElast)
+            {
+                fstModel.edModel = new EDModel();
+                fstModel.edModel.ParseEDInputFile(fstModel.EDFile, status, fstInput);
+            }
+            if (fstModel.convertAero)
+            {
+                fstModel.adModel = new ADModel();
+                fstModel.adModel.ParseADInputFile(fstModel.AeroFile, status, fstInput);
+            }
+            if (fstModel.convertHydro)
+            {
+                fstModel.hdModel = new HDModel();
+                fstModel.hdModel.ParseHDInputFile(fstModel.HydroFile, status, fstInput);
+            }
+            if (fstModel.convertSub)
+            {
+                fstModel.sdModel = new SDModel();
+                fstModel.sdModel.ParseSDInputFile(fstModel.SubFile, status, fstInput);
+            }
+            if (fstModel.convertMooring)
+            {
+                fstModel.mdModel = new MDModel();
+                fstModel.mdModel.ParseMDInputFile(fstModel.MooringFile, status, fstInput);
+            }
+            if (fstModel.convertServo)
+            {
+                //add code
+            }
+
+
+            if (outFile == OutFile.SacsPy)
+            {
+                ToSacs.ConvertToSacs(fstModel, ref status);
+                txtStatus.Text = status;
+            }
+            else if (outFile == OutFile.Ism)
+            {
+                ToIsm.ConvertToIsm(fstModel, ref status);
+                txtStatus.Text = status;
             }
         }
     }

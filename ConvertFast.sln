@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FASTInputDll", "..\FASTInte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp_FastInputDll", "TestApp_FastInputDll\TestApp_FastInputDll.csproj", "{4433A7FD-23BE-49BD-AB19-9463251FE51D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AeroDynApp", "..\AeroDynApp\AeroDynApp.csproj", "{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFASTApp", "..\AeroDynApp\OpenFASTApp\OpenFASTApp.csproj", "{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,22 @@ Global
 		{4433A7FD-23BE-49BD-AB19-9463251FE51D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4433A7FD-23BE-49BD-AB19-9463251FE51D}.Release|x64.ActiveCfg = Release|Any CPU
 		{4433A7FD-23BE-49BD-AB19-9463251FE51D}.Release|x64.Build.0 = Release|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{51B2350E-47EC-4682-936F-EA9ECCC4C2FE}.Release|x64.Build.0 = Release|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Debug|x64.Build.0 = Debug|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Release|x64.ActiveCfg = Release|Any CPU
+		{472B7AA4-ADAC-4E70-99C7-EFF6E9C3A408}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

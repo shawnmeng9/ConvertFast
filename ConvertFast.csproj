@@ -52,6 +52,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bentley.Structural.Ism.Api.8.1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b4d201f8319cef86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
