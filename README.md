@@ -17,7 +17,7 @@ The Bentley’s iTwin Analytical Synchronizer (ISM) needs to be installed which 
 
 https://www.bentley.com/software/itwin-analytical-synchronizer/
 
-This program should directly be used by opening ConvertFast.exe in the zipped file (download the zipped file at https://github.com/shawnmeng9/ConvertFast/releases)
+This program should directly be used by opening ConvertFast.exe in the zipped file (download the zipped Release file at the Assets section https://github.com/shawnmeng9/ConvertFast/releases)
 
 The following video shows how to use it for visualizing OpenFAST geometries.
 
