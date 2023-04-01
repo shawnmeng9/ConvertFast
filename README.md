@@ -1,6 +1,8 @@
 # ConvertFast
 A tool for visualizing OpenFAST wind turbine geometries
 
+![OC4_WindTurbine](https://user-images.githubusercontent.com/61556400/229302873-6e55d911-2e2b-4823-87be-a3acaac60211.png)
+
 This program is used for the visualization of OpenFAST models. Currently, the following OpenFAST modules are supported:
 
 -AeroDyn
