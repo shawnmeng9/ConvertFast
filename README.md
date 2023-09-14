@@ -15,9 +15,7 @@ This program is used for the visualization of OpenFAST models. Currently, the fo
 
 -MoorDyn
 
-The Bentley’s iTwin Analytical Synchronizer (ISM) needs to be installed which is free to viewing. It can be downloaded here:
-
-https://www.bentley.com/software/itwin-analytical-synchronizer/
+The Bentley’s iTwin Analytical Synchronizer (ISM) needs to be installed which is free to viewing. It can be downloaded at Bentley Software Centre (https://softwaredownloads.bentley.com/). Create an account and search for iTwin Analytical Synchronizer:
 
 This program should directly be used by opening ConvertFast.exe in the zipped file (download the zipped Release file at the Assets section https://github.com/shawnmeng9/ConvertFast/releases)
 
